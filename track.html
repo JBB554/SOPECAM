@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOPECAM Capital — Suivi Portefeuille</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gold-bg:rgba(201,168,76,0.08);--ink:#0A0C10;--ink2:#0E1118;--ink3:#13161F;--text:#E8E4D9;--text2:#A89F8A;--text3:#6B6048;--text4:#3A3020;--green:#4CAF75;--red:#E25B4A;--border:rgba(232,228,217,0.1);--border2:rgba(232,228,217,0.06)}
+body{background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(10,12,16,0.97);backdrop-filter:blur(12px)}
+.brand-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;letter-spacing:0.1em}
+.brand-sub{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.25em;color:var(--text3);text-transform:uppercase;display:block;margin-top:2px}
+.nav-back{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+.nav-back:hover{color:var(--gold)}
+
+/* Page layout */
+.page-header{padding:2.5rem 3rem;border-bottom:0.5px solid var(--border)}
+.ph-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.28em;color:var(--text3);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.ph-tag::before{content:'';width:24px;height:0.5px;background:var(--gold)}
+.ph-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--text)}
+.ph-title em{font-style:italic;color:var(--gold)}
+.ph-desc{font-size:14px;color:var(--text2);margin-top:0.75rem;line-height:1.65;max-width:540px}
+
+/* Summary cards */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border2)}
+.sum-card{background:var(--ink2);padding:1.75rem 2rem}
+.sum-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem}
+.sum-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text)}
+.sum-val.pos{color:var(--green)}.sum-val.neg{color:var(--red)}.sum-val.gold{color:var(--gold)}
+.sum-sub{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text3);margin-top:4px}
+
+/* Content grid */
+.content-grid{display:grid;grid-template-columns:1fr 340px;gap:1px;background:var(--border2);min-height:60vh}
+.main-panel{background:var(--ink)}
+.side-panel{background:var(--ink2)}
+
+/* Table */
+.table-header-row{padding:1.5rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--border2)}
+.table-section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase}
+.add-btn{padding:7px 16px;background:transparent;border:0.5px solid var(--gold);color:var(--gold);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+.add-btn:hover{background:var(--gold-bg)}
+.track-table{width:100%;border-collapse:collapse}
+.track-table th{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;padding:0.75rem 2rem;text-align:left;border-bottom:0.5px solid var(--border2);background:var(--ink2)}
+.track-table td{padding:1.1rem 2rem;border-bottom:0.5px solid var(--border2);font-size:13.5px;color:var(--text)}
+.track-table tr:hover td{background:var(--ink2)}
+.asset-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:var(--text)}
+.asset-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);margin-top:3px}
+.mono{font-family:'DM Mono',monospace}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.risk-badge{display:inline-flex;padding:2px 8px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.08em;text-transform:uppercase}
+.r-low{background:rgba(76,175,117,0.1);color:var(--green);border:0.5px solid rgba(76,175,117,0.25)}
+.r-med{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid rgba(201,168,76,0.25)}
+.r-high{background:rgba(226,91,74,0.1);color:var(--red);border:0.5px solid rgba(226,91,74,0.25)}
+.action-btn{padding:5px 12px;background:transparent;border:0.5px solid var(--border);color:var(--text3);font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.08em;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+.action-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Side panel */
+.side-section{padding:1.5rem;border-bottom:0.5px solid var(--border2)}
+.side-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--border2)}
+.alert-item{display:flex;flex-direction:column;gap:4px;padding:0.75rem 0;border-bottom:0.5px solid var(--border2)}
+.alert-item:last-child{border-bottom:none}
+.alert-title{font-size:12.5px;color:var(--text);font-weight:500}
+.alert-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3)}
+.alert-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:6px}
+.disclaimer{padding:1.5rem 2rem;font-size:11px;color:var(--text4);line-height:1.6;font-style:italic;border-top:0.5px solid var(--border2)}
+
+@media(max-width:768px){
+  .nav,.page-header,.sum-card{padding-left:1.25rem;padding-right:1.25rem}
+  .content-grid{grid-template-columns:1fr}
+  .side-panel{display:none}
+  .summary-row{grid-template-columns:1fr 1fr}
+  .track-table th,.track-table td{padding-left:1.25rem;padding-right:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div>
+    <span class="brand-name">SOPECAM CAPITAL</span>
+    <span class="brand-sub">Intelligence Financière · Yaoundé — Paris — Londres</span>
+  </div>
+  <a href="/index.html" class="nav-back">← Retour à l'Accueil</a>
+</nav>
+
+<div class="page-header">
+  <div class="ph-tag">Outil Personnel · Non Connecté</div>
+  <h1 class="ph-title">Suivi de <em>Portefeuille</em></h1>
+  <p class="ph-desc">Suivez vos actifs, alertes et opportunités sauvegardées. Vos données restent en local — aucune information financière n'est transmise à nos serveurs.</p>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-row">
+  <div class="sum-card">
+    <div class="sum-label">Valeur Estimée Totale</div>
+    <div class="sum-val gold" id="totalVal">— XAF</div>
+    <div class="sum-sub">Saisie manuelle</div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-label">Variation Hebdomadaire</div>
+    <div class="sum-val pos" id="weekChg">+0.0%</div>
+    <div class="sum-sub">Estimation indicative</div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-label">Actifs Suivis</div>
+    <div class="sum-val" id="assetCount">6</div>
+    <div class="sum-sub">Dans la liste de suivi</div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-label">Alertes Actives</div>
+    <div class="sum-val gold">3</div>
+    <div class="sum-sub">Seuils de prix configurés</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-grid">
+  <div class="main-panel">
+    <div class="table-header-row">
+      <span class="table-section-title">Liste de Suivi · Actifs Sélectionnés</span>
+      <button class="add-btn" onclick="alert('Fonctionnalité Premium — Connectez-vous pour sauvegarder vos actifs')">+ Ajouter un Actif</button>
+    </div>
+    <table class="track-table">
+      <thead>
+        <tr>
+          <th>Actif</th>
+          <th>Prix Actuel</th>
+          <th>Variation 24h</th>
+          <th>Variation 7j</th>
+          <th>Risque</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="asset-name">S&P 500</div><div class="asset-cat">Actions · Indice US</div></td>
+          <td class="mono">5 842</td>
+          <td class="mono pos">▲ +0.74%</td>
+          <td class="mono pos">▲ +1.2%</td>
+          <td><span class="risk-badge r-low">Faible</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+        <tr>
+          <td><div class="asset-name">Or XAU/USD</div><div class="asset-cat">Matière Première · Refuge</div></td>
+          <td class="mono">$3 274</td>
+          <td class="mono pos">▲ +0.41%</td>
+          <td class="mono pos">▲ +2.1%</td>
+          <td><span class="risk-badge r-low">Faible</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+        <tr>
+          <td><div class="asset-name">Cacao</div><div class="asset-cat">Commodité · Cameroun Export</div></td>
+          <td class="mono">$11 240/MT</td>
+          <td class="mono pos">▲ +3.7%</td>
+          <td class="mono pos">▲ +8.4%</td>
+          <td><span class="risk-badge r-med">Modéré</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+        <tr>
+          <td><div class="asset-name">Bitcoin BTC</div><div class="asset-cat">Crypto · Digital Asset</div></td>
+          <td class="mono">$107 420</td>
+          <td class="mono pos">▲ +2.3%</td>
+          <td class="mono pos">▲ +6.1%</td>
+          <td><span class="risk-badge r-high">Élevé</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+        <tr>
+          <td><div class="asset-name">Eurobonds Cameroun 2030</div><div class="asset-cat">Obligation Souveraine · XAF</div></td>
+          <td class="mono">7.2% / an</td>
+          <td class="mono">—</td>
+          <td class="mono">Stable</td>
+          <td><span class="risk-badge r-low">Faible</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+        <tr>
+          <td><div class="asset-name">USD/XAF</div><div class="asset-cat">Forex · Zone CEMAC</div></td>
+          <td class="mono">609.4</td>
+          <td class="mono neg">▼ -0.2%</td>
+          <td class="mono neg">▼ -0.5%</td>
+          <td><span class="risk-badge r-low">Faible</span></td>
+          <td><button class="action-btn">Analyser →</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="disclaimer">
+      Les données affichées sont à titre indicatif et éducatif uniquement. Ce tableau de suivi ne constitue pas un compte de courtage ni un conseil en investissement au sens de la réglementation COSUMAF. SOPECAM Capital n'est pas un prestataire de services d'investissement agréé. Consultez un conseiller financier qualifié avant toute décision.
+    </div>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div class="side-panel">
+    <div class="side-section">
+      <div class="side-label">Alertes de Prix</div>
+      <div class="alert-item"><div class="alert-title"><span class="alert-dot"></span>Or > $3 300</div><div class="alert-sub">Seuil de prise de profit · Actif</div></div>
+      <div class="alert-item"><div class="alert-title"><span class="alert-dot"></span>Cacao > $12 000</div><div class="alert-sub">Niveau de résistance · Actif</div></div>
+      <div class="alert-item"><div class="alert-title"><span class="alert-dot"></span>BTC < $95 000</div><div class="alert-sub">Support critique · Actif</div></div>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Opportunités Sauvegardées</div>
+      <div class="alert-item"><div class="alert-title">Fonds Cobalt Africain</div><div class="alert-sub">Commodités · Modéré</div></div>
+      <div class="alert-item"><div class="alert-title">ETF MSCI Africa</div><div class="alert-sub">Fonds Indiciel · Modéré</div></div>
+      <div class="alert-item"><div class="alert-title">SpaceX IPO (Partiel)</div><div class="alert-sub">Technologie · Élevé</div></div>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Notes Personnelles</div>
+      <textarea style="width:100%;background:var(--ink);border:0.5px solid var(--border);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;padding:0.75rem;resize:vertical;min-height:100px;outline:none;line-height:1.6" placeholder="Vos notes d'investissement..."></textarea>
+    </div>
+    <div class="side-section">
+      <a href="/index.html" style="display:block;padding:12px;background:var(--gold-bg);border:0.5px solid rgba(201,168,76,0.3);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;text-align:center;transition:all 0.2s">← Retour aux Marchés</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

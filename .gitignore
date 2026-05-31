@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel/
+
+# Build outputs
+dist/
+build/
+.output/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local test files
+*.test.local.*
+test-deploy/
+
+# Supabase local config (keep schema.sql, not local config)
+supabase/.branches/
+supabase/.temp/

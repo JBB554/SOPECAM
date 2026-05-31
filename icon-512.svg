@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#0A0C10"/>
+  <!-- Gold border frame -->
+  <rect x="16" y="16" width="480" height="480" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <!-- Inner subtle frame -->
+  <rect x="28" y="28" width="456" height="456" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="0.5"/>
+  
+  <!-- Large SC monogram — centered -->
+  <!-- S letter -->
+  <path d="M142 170 Q142 148 164 148 L232 148 Q254 148 254 170 L254 192 Q254 214 232 214 L164 214 Q142 214 142 236 L142 258 Q142 280 164 280 L232 280 Q254 280 254 302 Q254 324 232 324 L164 324" 
+        fill="none" stroke="#C9A84C" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- C letter -->
+  <path d="M282 170 Q282 148 304 148 L360 148 M282 170 L282 302 Q282 324 304 324 L360 324" 
+        fill="none" stroke="#C9A84C" stroke-width="12" stroke-linecap="square"/>
+  
+  <!-- Decorative horizontal rule -->
+  <line x1="80" y1="370" x2="432" y2="370" stroke="rgba(201,168,76,0.25)" stroke-width="0.5"/>
+  
+  <!-- Brand text -->
+  <text x="256" y="405" font-family="monospace" font-size="26" fill="#6B6048" text-anchor="middle" letter-spacing="8">SOPECAM</text>
+  <text x="256" y="435" font-family="monospace" font-size="16" fill="#3A3020" text-anchor="middle" letter-spacing="12">CAPITAL</text>
+  <text x="256" y="460" font-family="monospace" font-size="9" fill="#3A3020" text-anchor="middle" letter-spacing="4">INTELLIGENCE FINANCIÈRE MONDIALE</text>
+  
+  <!-- Gold corner accents -->
+  <line x1="16" y1="16" x2="60" y2="16" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="16" y1="16" x2="16" y2="60" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="496" y1="16" x2="452" y2="16" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="496" y1="16" x2="496" y2="60" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="16" y1="496" x2="60" y2="496" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="16" y1="496" x2="16" y2="452" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="496" y1="496" x2="452" y2="496" stroke="#C9A84C" stroke-width="3"/>
+  <line x1="496" y1="496" x2="496" y2="452" stroke="#C9A84C" stroke-width="3"/>
+  
+  <!-- Small dot accents at midpoints -->
+  <rect x="253" y="13" width="6" height="6" fill="rgba(201,168,76,0.5)"/>
+  <rect x="253" y="493" width="6" height="6" fill="rgba(201,168,76,0.5)"/>
+  <rect x="13" y="253" width="6" height="6" fill="rgba(201,168,76,0.5)"/>
+  <rect x="493" y="253" width="6" height="6" fill="rgba(201,168,76,0.5)"/>
+</svg>

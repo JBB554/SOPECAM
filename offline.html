@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOPECAM Capital — Hors Ligne</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--ink:#0A0C10;--text:#E8E4D9;--text2:#A89F8A;--text3:#6B6048;--border:rgba(232,228,217,0.1)}
+body{background:var(--ink);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;border-bottom:0.5px solid var(--border)}
+.brand-name{font-family:Georgia,serif;font-size:18px;font-weight:700;letter-spacing:0.1em}
+.brand-sub{font-family:monospace;font-size:8px;letter-spacing:0.25em;color:var(--text3);text-transform:uppercase;display:block;margin-top:2px}
+.container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;text-align:center;max-width:600px;margin:0 auto}
+.offline-icon{font-size:64px;margin-bottom:2rem;opacity:0.4}
+.offline-title{font-family:Georgia,serif;font-size:32px;font-weight:700;color:var(--text);margin-bottom:1rem;line-height:1.2}
+.offline-title em{font-style:italic;color:var(--gold)}
+.offline-desc{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:2.5rem}
+.btn{padding:12px 28px;background:var(--gold);color:var(--ink);font-size:12px;font-weight:500;letter-spacing:0.08em;border:none;cursor:pointer;font-family:monospace;text-transform:uppercase;transition:opacity 0.2s;text-decoration:none;display:inline-block}
+.btn:hover{opacity:0.88}
+.cached-note{margin-top:2rem;font-family:monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase}
+.divider{width:40px;height:0.5px;background:var(--gold);margin:2rem auto}
+.tips{text-align:left;background:rgba(201,168,76,0.05);border:0.5px solid rgba(201,168,76,0.15);padding:1.5rem 2rem;width:100%}
+.tips-title{font-family:monospace;font-size:9px;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem}
+.tip{font-size:13px;color:var(--text2);line-height:1.65;padding:0.5rem 0;border-bottom:0.5px solid var(--border);display:flex;gap:10px}
+.tip:last-child{border-bottom:none;padding-bottom:0}
+.tip::before{content:'—';color:var(--gold);flex-shrink:0}
+footer{padding:1.5rem 3rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;font-family:monospace;font-size:10px;color:var(--text3)}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div>
+    <span class="brand-name">SOPECAM CAPITAL</span>
+    <span class="brand-sub">Intelligence Financière · Yaoundé — Paris — Londres</span>
+  </div>
+  <span style="font-family:monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em">⚡ Mode Hors Ligne</span>
+</nav>
+
+<div class="container">
+  <div class="offline-icon">📡</div>
+  <h1 class="offline-title">Connexion <em>Interrompue</em></h1>
+  <p class="offline-desc">
+    Vous êtes actuellement hors ligne. Les marchés financiers continuent de bouger, mais nous avons besoin d'une connexion pour vous afficher les données en temps réel.
+  </p>
+  <a href="/" class="btn" onclick="window.location.reload()">Réessayer la Connexion</a>
+  <p class="cached-note">Les pages visitées récemment sont disponibles en cache</p>
+
+  <div class="divider"></div>
+
+  <div class="tips">
+    <div class="tips-title">Pendant ce temps, rappelez-vous</div>
+    <div class="tip">Les marchés ont des cycles. Les bonnes décisions d'investissement se prennent avec patience, pas en temps réel.</div>
+    <div class="tip">La diversification reste la règle d'or : ne jamais concentrer plus de 10% d'un portefeuille sur un seul actif.</div>
+    <div class="tip">Revisitez nos modules d'Académie Financière en cache pour continuer à vous former.</div>
+    <div class="tip">Données COSUMAF — Toute décision d'investissement doit être prise avec un conseiller qualifié.</div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 SOPECAM Capital · Tous droits réservés</span>
+  <span>Mode Hors Ligne — PWA</span>
+</footer>
+
+<script>
+// Auto-retry when connection restores
+window.addEventListener('online', () => window.location.reload());
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "name": "SOPECAM Capital — Intelligence Financière Mondiale",
+  "short_name": "SOPECAM Capital",
+  "description": "La plateforme d'intelligence financière de référence d'Afrique Centrale. Données mondiales, analyses éditoriales, éducation financière.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0C10",
+  "theme_color": "#C9A84C",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "fr",
+  "categories": ["finance", "business", "news"],
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Marchés",
+      "short_name": "Marchés",
+      "description": "Voir les marchés en direct",
+      "url": "/#markets",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Opportunités",
+      "short_name": "Opportunités",
+      "description": "Tableau des opportunités",
+      "url": "/#opportunities",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
+    }
+  ]
+}

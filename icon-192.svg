@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" fill="#0A0C10"/>
+  <!-- Gold border frame -->
+  <rect x="8" y="8" width="176" height="176" fill="none" stroke="#C9A84C" stroke-width="1"/>
+  <!-- SC monogram -->
+  <!-- S letter -->
+  <path d="M58 72 Q58 64 66 64 L90 64 Q98 64 98 72 L98 80 Q98 88 90 88 L66 88 Q58 88 58 96 L58 104 Q58 112 66 112 L90 112 Q98 112 98 120" 
+        fill="none" stroke="#C9A84C" stroke-width="5" stroke-linecap="square"/>
+  <!-- C letter -->
+  <path d="M114 72 Q114 64 122 64 L136 64 M114 72 L114 120 Q114 128 122 128 L136 128" 
+        fill="none" stroke="#C9A84C" stroke-width="5" stroke-linecap="square"/>
+  <!-- Bottom brand text -->
+  <text x="96" y="155" font-family="monospace" font-size="10" fill="#6B6048" text-anchor="middle" letter-spacing="3">SOPECAM</text>
+  <text x="96" y="170" font-family="monospace" font-size="7" fill="#3A3020" text-anchor="middle" letter-spacing="4">CAPITAL</text>
+  <!-- Gold corner accents -->
+  <line x1="8" y1="8" x2="28" y2="8" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="8" y1="8" x2="8" y2="28" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="184" y1="8" x2="164" y2="8" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="184" y1="8" x2="184" y2="28" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="8" y1="184" x2="28" y2="184" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="8" y1="184" x2="8" y2="164" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="184" y1="184" x2="164" y2="184" stroke="#C9A84C" stroke-width="2"/>
+  <line x1="184" y1="184" x2="184" y2="164" stroke="#C9A84C" stroke-width="2"/>
+</svg>
