@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOPECAM Capital — Intelligence Financière Mondiale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:#8A6A20;--gold-bg:rgba(201,168,76,0.08);
+  --ink:#0A0C10;--ink2:#0E1118;--ink3:#13161F;
+  --text:#E8E4D9;--text2:#A89F8A;--text3:#6B6048;--text4:#3A3020;
+  --green:#4CAF75;--red:#E25B4A;--border:rgba(232,228,217,0.1);
+  --border2:rgba(232,228,217,0.06);
+}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(10,12,16,0.97);backdrop-filter:blur(12px)}
+.brand{display:flex;flex-direction:column;gap:1px}
+.brand-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;letter-spacing:0.1em;color:var(--text)}
+.brand-sub{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.25em;color:var(--text3);text-transform:uppercase}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:12.5px;color:var(--text3);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s;font-family:'DM Mono',monospace;text-transform:uppercase}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.live-badge{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--green);letter-spacing:0.1em}
+.live-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.nav-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+
+/* ── TICKER ── */
+.ticker{background:var(--ink2);border-bottom:0.5px solid var(--border2);padding:0.45rem 0;overflow:hidden;cursor:default}
+.ticker-inner{display:flex;gap:2.5rem;animation:scroll 55s linear infinite;width:max-content}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:11.5px;white-space:nowrap}
+.t-sym{color:var(--text3);font-weight:500;font-size:10px;letter-spacing:0.08em}
+.t-val{color:var(--text);font-weight:500}
+.t-up{color:var(--green)}.t-dn{color:var(--red)}
+.tick-sep{color:var(--text4);font-size:10px}
+
+/* ── HERO ── */
+.hero{display:grid;grid-template-columns:1fr 340px;min-height:92vh;border-bottom:0.5px solid var(--border)}
+.hero-main{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:space-between;border-right:0.5px solid var(--border)}
+.hero-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.28em;color:var(--text3);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.hero-tag::before{content:'';width:24px;height:0.5px;background:var(--gold)}
+.hero-h1{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;line-height:1.08;color:var(--text);max-width:640px;margin-bottom:1.5rem}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:15px;color:var(--text2);line-height:1.75;max-width:540px;margin-bottom:2.5rem}
+.hero-ctas{display:flex;gap:12px;margin-bottom:3rem}
+.btn-primary{padding:12px 28px;background:var(--gold);color:var(--ink);font-size:12px;font-weight:500;letter-spacing:0.08em;border:none;cursor:pointer;font-family:'DM Mono',monospace;text-transform:uppercase;transition:opacity 0.2s}
+.btn-primary:hover{opacity:0.88}
+.btn-secondary{padding:12px 28px;background:transparent;color:var(--gold);font-size:12px;font-weight:500;letter-spacing:0.08em;border:0.5px solid var(--gold);cursor:pointer;font-family:'DM Mono',monospace;text-transform:uppercase;transition:all 0.2s}
+.btn-secondary:hover{background:var(--gold-bg)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2)}
+.stat{background:var(--ink);padding:1.25rem 1rem}
+.stat-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase}
+
+/* ── SIDEBAR ── */
+.hero-sidebar{background:var(--ink2);display:flex;flex-direction:column}
+.sidebar-top{padding:2rem 1.5rem;border-bottom:0.5px solid var(--border2);flex:1}
+.panel-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.25em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:0.5px solid var(--border2)}
+.mkt-row{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0;border-bottom:0.5px solid var(--border2);cursor:pointer;transition:opacity 0.2s}
+.mkt-row:hover{opacity:0.75}
+.mkt-row:last-child{border-bottom:none}
+.mr-l{display:flex;flex-direction:column;gap:2px}
+.mr-name{font-size:13px;color:var(--text);font-weight:500}
+.mr-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text4)}
+.mr-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.mr-price{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:500}
+.mr-chg{font-family:'DM Mono',monospace;font-size:10px}
+.up{color:var(--green)}.dn{color:var(--red)}
+.sparkline{width:50px;height:22px}
+
+/* ── FEATURE STRIP ── */
+.feature-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:0.5px solid var(--border)}
+.feature-cell{padding:2rem 2rem;border-right:0.5px solid var(--border);display:flex;flex-direction:column;gap:0.75rem}
+.feature-cell:last-child{border-right:none}
+.fc-icon{font-size:20px;color:var(--gold);margin-bottom:0.25rem}
+.fc-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text)}
+.fc-desc{font-size:13px;color:var(--text3);line-height:1.6}
+
+/* ── SECTIONS ── */
+section{border-bottom:0.5px solid var(--border)}
+.section-header{display:flex;justify-content:space-between;align-items:baseline;padding:2.5rem 3rem 1.5rem;border-bottom:0.5px solid var(--border2)}
+.sh-left{display:flex;align-items:baseline;gap:16px}
+.sh-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text)}
+.sh-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase}
+.sh-link{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;text-decoration:none}
+.sh-link:hover{text-decoration:underline}
+
+/* ── MARKETS ── */
+.markets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);padding:1px}
+.mcard{background:var(--ink);padding:1.75rem 2rem;cursor:pointer;transition:background 0.2s}
+.mcard:hover{background:var(--ink2)}
+.mcard-cat{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem}
+.mcard-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:0.25rem}
+.mcard-price{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--text);margin-bottom:4px}
+.mcard-chg{font-family:'DM Mono',monospace;font-size:11px}
+.mcard-chart{margin-top:1rem;height:48px;width:100%}
+.mcard-desc{font-size:12px;color:var(--text3);margin-top:0.75rem;line-height:1.5}
+
+/* ── EDITORIAL ── */
+.editorial-grid{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border2)}
+.editorial-left{background:var(--ink)}
+.editorial-right{background:var(--ink);display:flex;flex-direction:column}
+.featured-article{padding:2.5rem 3rem;border-bottom:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s}
+.featured-article:hover{background:var(--ink2)}
+.article-kicker{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.kicker-line{width:20px;height:0.5px;background:var(--gold)}
+.article-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:1rem;max-width:580px}
+.article-body{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:1.5rem;max-width:560px}
+.article-meta{display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--text4)}
+.article-list{display:flex;flex-direction:column}
+.article-item{padding:1.25rem 1.75rem;border-bottom:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s}
+.article-item:hover{background:var(--ink2)}
+.ai-kicker{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;margin-bottom:0.5rem}
+.ai-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:0.35rem}
+.ai-meta{font-family:'DM Mono',monospace;font-size:9px;color:var(--text4)}
+
+/* ── LEARN / EDUCATION ── */
+.learn-section{background:var(--ink2)}
+.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2)}
+.learn-card{background:var(--ink2);padding:2rem 1.75rem;cursor:pointer;border-bottom:0.5px solid var(--border2)}
+.lc-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:0.1em;margin-bottom:1rem}
+.lc-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:0.75rem;line-height:1.3}
+.lc-body{font-size:13px;color:var(--text3);line-height:1.65;margin-bottom:1.25rem}
+.lc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.lc-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:3px 10px;border:0.5px solid var(--border);color:var(--text3);text-transform:uppercase}
+.lc-level{font-family:'DM Mono',monospace;font-size:9px;padding:3px 10px;text-transform:uppercase;letter-spacing:0.1em}
+.lc-level.beginner{background:rgba(76,175,117,0.1);color:var(--green);border:0.5px solid rgba(76,175,117,0.25)}
+.lc-level.inter{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid rgba(201,168,76,0.25)}
+.lc-level.advanced{background:rgba(226,91,74,0.1);color:var(--red);border:0.5px solid rgba(226,91,74,0.25)}
+
+/* ── OPPORTUNITY BOARD ── */
+.opp-grid{display:flex;flex-direction:column;gap:1px;background:var(--border2)}
+.opp-row{background:var(--ink);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.2fr;align-items:center;padding:1.25rem 3rem;cursor:pointer;transition:background 0.2s}
+.opp-row:hover{background:var(--ink2)}
+.opp-header{background:var(--ink2);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.2fr;padding:0.75rem 3rem;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase}
+.or-name{display:flex;flex-direction:column;gap:3px}
+.or-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:var(--text)}
+.or-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.1em}
+.or-val{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:500}
+.or-val.pos{color:var(--green)}.or-val.neg{color:var(--red)}
+.risk-badge{display:inline-flex;padding:3px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase}
+.risk-low{background:rgba(76,175,117,0.1);color:var(--green);border:0.5px solid rgba(76,175,117,0.25)}
+.risk-med{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid rgba(201,168,76,0.25)}
+.risk-high{background:rgba(226,91,74,0.1);color:var(--red);border:0.5px solid rgba(226,91,74,0.25)}
+.or-btn{padding:7px 16px;background:transparent;border:0.5px solid var(--gold);color:var(--gold);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.2s;justify-self:end}
+.or-btn:hover{background:var(--gold-bg)}
+
+/* ── CRYPTO ── */
+.crypto-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border2)}
+.crypto-card{background:var(--ink);padding:1.75rem 1.5rem;cursor:pointer}
+.cc-sym{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--gold);margin-bottom:0.5rem;text-transform:uppercase}
+.cc-name{font-size:13px;color:var(--text2);margin-bottom:0.75rem}
+.cc-price{font-family:'DM Mono',monospace;font-size:19px;font-weight:500;color:var(--text);margin-bottom:4px}
+.cc-chg{font-family:'DM Mono',monospace;font-size:10.5px}
+.cc-info{font-size:11.5px;color:var(--text3);margin-top:0.75rem;line-height:1.5;padding-top:0.75rem;border-top:0.5px solid var(--border2)}
+
+/* ── GUIDANCE ── */
+.guidance-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border2)}
+.g-card{background:var(--ink);padding:2rem}
+.gc-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.gc-signal{width:8px;height:8px;border-radius:50%}
+.gc-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase}
+.gc-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:0.75rem}
+.gc-body{font-size:13px;color:var(--text3);line-height:1.65;margin-bottom:1rem}
+.gc-data{display:flex;flex-direction:column;gap:8px;padding-top:1rem;border-top:0.5px solid var(--border2)}
+.gc-row{display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:10.5px}
+.gc-lbl{color:var(--text3)}.gc-num{color:var(--text);font-weight:500}
+.disclaimer{font-size:10px;color:var(--text4);line-height:1.5;padding:0.75rem 3rem;border-top:0.5px solid var(--border2);font-style:italic}
+
+/* ── AFRICA FOCUS ── */
+.africa-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border2)}
+.af-cell{background:var(--ink);padding:2.5rem 2.5rem}
+.af-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.af-tag::before{content:'';width:16px;height:0.5px;background:var(--gold)}
+.af-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:1rem}
+.af-body{font-size:13.5px;color:var(--text2);line-height:1.75;margin-bottom:1.5rem}
+.af-list{display:flex;flex-direction:column;gap:8px}
+.af-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)}
+.af-item::before{content:'—';color:var(--gold);font-size:12px;flex-shrink:0;margin-top:1px}
+
+/* ── SND30 BAR ── */
+.snd-footer{background:var(--ink2);border-top:0.5px solid rgba(201,168,76,0.2);padding:1rem 3rem;display:flex;align-items:center;gap:1rem}
+.snd-badge{background:var(--gold-bg);border:0.5px solid rgba(201,168,76,0.35);padding:4px 12px;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.snd-text{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* ── FOOTER ── */
+footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;border-top:0.5px solid var(--border)}
+.footer-brand .brand-name{font-size:16px;margin-bottom:0.5rem}
+.footer-brand p{font-size:13px;color:var(--text3);line-height:1.65;margin-top:0.75rem}
+.footer-col h4{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem}
+.footer-col a{display:block;font-size:13px;color:var(--text3);text-decoration:none;margin-bottom:0.5rem;transition:color 0.2s}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{padding:1rem 3rem;border-top:0.5px solid var(--border2);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:var(--text4)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:0.5px solid var(--border)}
+.tab{padding:0.85rem 2rem;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase}
+.tab.active,.tab:hover{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ── INTERACTIVE CHART ── */
+.chart-container{padding:2rem 3rem;background:var(--ink2)}
+.chart-controls{display:flex;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
+.chart-btn{padding:5px 14px;background:transparent;border:0.5px solid var(--border);color:var(--text3);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+.chart-btn.active,.chart-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+#mainChart{width:100%;height:300px}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--text4);border-radius:2px}
+
+/* ── ACCORDION ── */
+.acc-item{border-bottom:0.5px solid var(--border2)}
+.acc-head{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 3rem;cursor:pointer;transition:background 0.2s}
+.acc-head:hover{background:var(--ink2)}
+.acc-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:var(--text)}
+.acc-icon{font-family:'DM Mono',monospace;font-size:18px;color:var(--gold);transition:transform 0.2s;line-height:1}
+.acc-body{display:none;padding:0 3rem 1.25rem;font-size:13.5px;color:var(--text2);line-height:1.75}
+.acc-item.open .acc-body{display:block}
+.acc-item.open .acc-icon{transform:rotate(45deg)}
+
+@media(max-width:768px){
+  .nav{padding:1rem 1.25rem}.nav-links{display:none}
+  .hero{grid-template-columns:1fr}.hero-sidebar{display:none}
+  .hero-h1{font-size:32px}.feature-strip{grid-template-columns:1fr 1fr}
+  .markets-grid{grid-template-columns:1fr 1fr}.editorial-grid{grid-template-columns:1fr}
+  .opp-row,.opp-header{grid-template-columns:1fr 1fr}.opp-header :nth-child(n+3){display:none}.opp-row :nth-child(n+3){display:none}
+  .crypto-grid{grid-template-columns:1fr 1fr}.guidance-grid{grid-template-columns:1fr}
+  .africa-grid{grid-template-columns:1fr}.learn-grid{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr 1fr}.hero-stats{grid-template-columns:1fr 1fr}
+  .section-header,.opp-header,.opp-row,.snd-footer,.footer-bottom,.acc-head,.chart-container{padding-left:1.25rem;padding-right:1.25rem}
+  .featured-article,.disclaimer{padding-left:1.25rem;padding-right:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="brand">
+    <span class="brand-name">SOPECAM CAPITAL</span>
+    <span class="brand-sub">Intelligence Financière · Yaoundé — Paris — Londres</span>
+  </div>
+  <div class="nav-links">
+    <a href="#markets" class="active">Marchés</a>
+    <a href="#editorial">Actualités</a>
+    <a href="#crypto">Crypto</a>
+    <a href="#opportunities">Opportunités</a>
+    <a href="#learn">Apprendre</a>
+    <a href="#guidance">Portefeuille</a>
+    <a href="#africa">Afrique</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-time" id="clock">--:-- UTC</span>
+    <span class="live-badge">MARCHÉS EN DIRECT</span>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-main">
+    <div>
+      <div class="hero-tag">Plateforme d'Intelligence Financière No.1 en Afrique Centrale</div>
+      <h1 class="hero-h1">Où le Cameroun<br>rencontre <em>le capital mondial</em></h1>
+      <p class="hero-desc">Données de marchés en temps réel, analyses éditoriales de rang mondial, et accès aux opportunités d'investissement à l'échelle planétaire — des IPOs aux obligations souveraines, des matières premières africaines aux actifs numériques. En ligne avec la Vision SND30.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('markets').scrollIntoView({behavior:'smooth'})">Explorer les Marchés</button>
+        <button class="btn-secondary" onclick="document.getElementById('learn').scrollIntoView({behavior:'smooth'})">Commencer à Apprendre</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">180+</div><div class="stat-lbl">Marchés couverts</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-lbl">Flux en temps réel</div></div>
+      <div class="stat"><div class="stat-num">SND30</div><div class="stat-lbl">Alignement stratégique</div></div>
+    </div>
+  </div>
+  <aside class="hero-sidebar">
+    <div class="sidebar-top">
+      <div class="panel-label">Indices Clés</div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">S&amp;P 500</span><span class="mr-sub">Equity · NYSE</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,18 8,14 14,16 20,10 26,12 32,6 38,8 46,4" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">5 842</span><span class="mr-chg up">+0.74%</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">Brent Crude</span><span class="mr-sub">Énergie · ICE</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,8 8,10 14,7 20,12 26,9 32,14 38,11 46,13" fill="none" stroke="#C9A84C" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">$93.40</span><span class="mr-chg up">+1.2%</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">Or XAU/USD</span><span class="mr-sub">Métal précieux</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,12 8,10 14,8 20,10 26,6 32,8 38,5 46,7" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">$3 274</span><span class="mr-chg up">+0.41%</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">Bitcoin</span><span class="mr-sub">Crypto · BTC/USD</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,14 8,10 14,8 20,4 26,7 32,5 38,3 46,6" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">$107 420</span><span class="mr-chg up">+2.3%</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">Cacao</span><span class="mr-sub">Matière première · ICCO</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,16 8,12 14,9 20,6 26,8 32,4 38,6 46,3" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">$11 240</span><span class="mr-chg up">+3.7%</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">EUR/XAF</span><span class="mr-sub">Forex · Zone CFA</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,6 8,7 14,8 20,7 26,8 32,7 38,8 46,7" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">655.96</span><span class="mr-chg up">Stable</span></div></div>
+      <div class="mkt-row"><div class="mr-l"><span class="mr-name">DAX 40</span><span class="mr-sub">Equity · Frankfurt</span></div><svg class="sparkline" viewBox="0 0 50 22"><polyline points="2,14 8,12 14,10 20,12 26,8 32,10 38,7 46,9" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><div class="mr-r"><span class="mr-price">23 540</span><span class="mr-chg up">+0.55%</span></div></div>
+    </div>
+  </aside>
+</section>
+
+<!-- FEATURE STRIP -->
+<div class="feature-strip">
+  <div class="feature-cell">
+    <div class="fc-icon">◈</div>
+    <div class="fc-title">Données en Temps Réel</div>
+    <div class="fc-desc">Cours boursiers, devises, matières premières et crypto — mis à jour en continu. De Wall Street au BRVM.</div>
+  </div>
+  <div class="feature-cell">
+    <div class="fc-icon">◉</div>
+    <div class="fc-title">Analyses Éditoriales</div>
+    <div class="fc-desc">Notre équipe décode l'actualité financière mondiale pour le contexte africain. Pas de bruit — seulement ce qui compte.</div>
+  </div>
+  <div class="feature-cell">
+    <div class="fc-icon">◎</div>
+    <div class="fc-title">Opportunités Sélectionnées</div>
+    <div class="fc-desc">IPOs, obligations, startups africaines, infrastructures — chaque deal évalué, contextualisé, accessible depuis chez vous.</div>
+  </div>
+  <div class="feature-cell">
+    <div class="fc-icon">◇</div>
+    <div class="fc-title">Education Financière</div>
+    <div class="fc-desc">Des marchés à la crypto — des modules clairs pour que chaque Camerounais comprenne et participe à l'économie mondiale.</div>
+  </div>
+</div>
+
+<!-- MARKETS -->
+<section id="markets">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Marchés Mondiaux</span><span class="sh-tag">Temps Réel</span></div>
+    <a class="sh-link" href="#markets">Voir Tous →</a>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="filterMkt(this,'all')">Tous</div>
+    <div class="tab" onclick="filterMkt(this,'equities')">Actions</div>
+    <div class="tab" onclick="filterMkt(this,'commodities')">Matières</div>
+    <div class="tab" onclick="filterMkt(this,'forex')">Devises</div>
+    <div class="tab" onclick="filterMkt(this,'bonds')">Obligations</div>
+  </div>
+  <div class="markets-grid" id="marketsGrid">
+    <div class="mcard" data-cat="equities"><div class="mcard-cat">Actions · USA</div><div class="mcard-name">S&amp;P 500</div><div class="mcard-price">5 842.3</div><div class="mcard-chg up">▲ +43.1 (+0.74%)</div><canvas class="mcard-chart" id="chart-sp500"></canvas><div class="mcard-desc">L'indice phare américain reflète la santé de l'économie mondiale. Hausse portée par le secteur technologique.</div></div>
+    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Énergie · Brent</div><div class="mcard-name">Pétrole Brut</div><div class="mcard-price">$93.40</div><div class="mcard-chg up">▲ +$1.12 (+1.2%)</div><canvas class="mcard-chart" id="chart-brent"></canvas><div class="mcard-desc">Tension géopolitique au Moyen-Orient soutient les prix. Relevé positif pour les exportateurs comme le Cameroun.</div></div>
+    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Métal Précieux</div><div class="mcard-name">Or XAU</div><div class="mcard-price">$3 274</div><div class="mcard-chg up">▲ +$13 (+0.41%)</div><canvas class="mcard-chart" id="chart-gold"></canvas><div class="mcard-desc">Valeur refuge mondiale. En hausse sur fond d'incertitudes macro-économiques globales et de dollar plus faible.</div></div>
+    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Agriculture · ICCO</div><div class="mcard-name">Cacao</div><div class="mcard-price">$11 240/MT</div><div class="mcard-chg up">▲ +$401 (+3.7%)</div><canvas class="mcard-chart" id="chart-cocoa"></canvas><div class="mcard-desc">Le Cameroun, 5e producteur mondial, bénéficie directement de la flambée des prix. Super-cycle en cours.</div></div>
+    <div class="mcard" data-cat="equities"><div class="mcard-cat">Actions · Europe</div><div class="mcard-name">DAX 40</div><div class="mcard-price">23 540</div><div class="mcard-chg up">▲ +130 (+0.55%)</div><canvas class="mcard-chart" id="chart-dax"></canvas><div class="mcard-desc">L'indice allemand consolide sa position. Secteur industriel et automobile en phase de rebond.</div></div>
+    <div class="mcard" data-cat="forex"><div class="mcard-cat">Devises · Forex</div><div class="mcard-name">USD/XAF</div><div class="mcard-price">609.4</div><div class="mcard-chg dn">▼ -1.2 (-0.2%)</div><canvas class="mcard-chart" id="chart-xaf"></canvas><div class="mcard-desc">Le franc CFA, arrimé à l'euro, offre une stabilité structurelle favorable aux investisseurs de la zone CEMAC.</div></div>
+  </div>
+</section>
+
+<!-- LIVE CHART -->
+<div class="chart-container">
+  <div class="chart-controls">
+    <button class="chart-btn active" onclick="updateChart(this,'sp500')">S&amp;P 500</button>
+    <button class="chart-btn" onclick="updateChart(this,'gold')">Or</button>
+    <button class="chart-btn" onclick="updateChart(this,'oil')">Pétrole</button>
+    <button class="chart-btn" onclick="updateChart(this,'cocoa')">Cacao</button>
+    <button class="chart-btn" onclick="updateChart(this,'btc')">Bitcoin</button>
+  </div>
+  <canvas id="mainChart" role="img" aria-label="Graphique de prix sur 30 jours"></canvas>
+</div>
+
+<!-- EDITORIAL -->
+<section id="editorial">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Intelligence &amp; Analyse</span><span class="sh-tag">Édition du Jour</span></div>
+    <a class="sh-link" href="#editorial">Archives →</a>
+  </div>
+  <div class="editorial-grid">
+    <div class="editorial-left">
+      <div class="featured-article">
+        <div class="article-kicker"><span class="kicker-line"></span>Analyse Exclusive</div>
+        <h2 class="article-title">Les Matières Premières Africaines Entrent dans un Nouveau Super-Cycle — Ce que cela signifie pour la Zone CFA</h2>
+        <p class="article-body">La hausse simultanée du cacao, du cobalt, du cuivre et du pétrole brut redessine les flux de capitaux vers l'Afrique subsaharienne. Notre équipe d'analystes cartographie les opportunités concrètes pour les investisseurs camerounais navigant les 18 prochains mois — de la diversification de portefeuille aux véhicules d'accès institutionnel disponibles depuis Yaoundé.</p>
+        <div class="article-meta"><span>Équipe Analyse · SOPECAM Capital</span><span>12 min de lecture</span></div>
+      </div>
+      <div class="featured-article">
+        <div class="article-kicker"><span class="kicker-line"></span>Politique Monétaire</div>
+        <h2 class="article-title">La Décision de Taux BEAC et ses Implications pour les Rendements Obligataires Régionaux</h2>
+        <p class="article-body">Le Comité de Politique Monétaire de la BEAC maintient ses taux directeurs dans un contexte de désinflation progressive. Analyse des effets sur la courbe des taux en zone CEMAC et positionnement optimal pour les détenteurs d'obligations souveraines.</p>
+        <div class="article-meta"><span>Bureau Zone CFA · SOPECAM Capital</span><span>7 min de lecture</span></div>
+      </div>
+    </div>
+    <div class="editorial-right">
+      <div style="padding:1rem 1.25rem;border-bottom:0.5px solid var(--border2)"><div class="panel-label">À la Une</div></div>
+      <div class="article-list">
+        <div class="article-item"><div class="ai-kicker">IPO Watch</div><div class="ai-title">Les Prochaines Grandes Ouvertures de Capital dans la Tech et l'Espace</div><div class="ai-meta">Marchés Mondiaux · 6 min</div></div>
+        <div class="article-item"><div class="ai-kicker">Pétrole &amp; Gaz</div><div class="ai-title">Brent au-dessus de $93 : Perspectives des Recettes d'Exportation du Cameroun</div><div class="ai-meta">Matières Premières · 5 min</div></div>
+        <div class="article-item"><div class="ai-kicker">Devises</div><div class="ai-title">Le Cycle de Force du Dollar Atteint Son Pic — Fenêtre d'Opportunité pour les Détenteurs de XAF</div><div class="ai-meta">Forex · 3 min</div></div>
+        <div class="article-item"><div class="ai-kicker">Startups Africaines</div><div class="ai-title">La Fintech Africaine Lève $2.1Mds au T1 2026 — Les Meilleures Pistes à Suivre</div><div class="ai-meta">Afrique · 8 min</div></div>
+        <div class="article-item"><div class="ai-kicker">SND30 &amp; Finance</div><div class="ai-title">Comment les Infrastructures Numériques du Cameroun Attirent les Capitaux Étrangers</div><div class="ai-meta">Cameroun · 9 min</div></div>
+        <div class="article-item"><div class="ai-kicker">Investissement Responsable</div><div class="ai-title">ESG en Afrique : Les Fonds qui Combinent Rendement et Impact Positif</div><div class="ai-meta">Global · 6 min</div></div>
+        <div class="article-item"><div class="ai-kicker">Rapport Hebdomadaire</div><div class="ai-title">Synthèse des Marchés — Semaine du 26 Mai 2026</div><div class="ai-meta">Digest · 4 min</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRYPTO -->
+<section id="crypto">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Actifs Numériques</span><span class="sh-tag">Cryptomonnaies Sélectionnées</span></div>
+    <a class="sh-link" href="#crypto">Tout voir →</a>
+  </div>
+  <div class="crypto-grid">
+    <div class="crypto-card"><div class="cc-sym">BTC</div><div class="cc-name">Bitcoin</div><div class="cc-price">$107 420</div><div class="cc-chg up">▲ +2.3% (24h)</div><div class="cc-info">La plus grande cryptomonnaie par capitalisation. Utilisée comme réserve de valeur et couverture contre l'inflation, accessible depuis le Cameroun via des plateformes régulées.</div></div>
+    <div class="crypto-card"><div class="cc-sym">ETH</div><div class="cc-name">Ethereum</div><div class="cc-price">$2 614</div><div class="cc-chg up">▲ +1.8% (24h)</div><div class="cc-info">Plateforme de contrats intelligents. Pilier de la finance décentralisée (DeFi) et des applications Web3. Potentiel de croissance lié à l'adoption institutionnelle.</div></div>
+    <div class="crypto-card"><div class="cc-sym">XRP</div><div class="cc-name">Ripple XRP</div><div class="cc-price">$2.87</div><div class="cc-chg up">▲ +0.9% (24h)</div><div class="cc-info">Protocole de paiement transfrontalier rapide. Particulièrement pertinent pour les envois de fonds Afrique-diaspora et les règlements inter-banques en zone CFA.</div></div>
+    <div class="crypto-card"><div class="cc-sym">USDT</div><div class="cc-name">Tether USD</div><div class="cc-price">$1.000</div><div class="cc-chg up">Stable</div><div class="cc-info">Stablecoin adossé au dollar américain. Permet l'exposition aux marchés crypto sans la volatilité. Outil de préservation de valeur accessible à tous.</div></div>
+  </div>
+  <div style="padding:1.5rem 3rem;background:var(--ink2);border-top:0.5px solid var(--border2)">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem">Comprendre la Crypto</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+      <div class="acc-item" style="border:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2)"><div class="acc-head" onclick="toggle(this.parentElement)" style="padding:1rem 1.25rem"><span class="acc-title" style="font-size:13px">Qu'est-ce qu'une cryptomonnaie ?</span><span class="acc-icon">+</span></div><div class="acc-body" style="padding:0 1.25rem 1rem">Une cryptomonnaie est une monnaie numérique décentralisée, sécurisée par cryptographie et fonctionnant sur une blockchain — un registre transparent et infalsifiable. Contrairement aux devises traditionnelles, elle n'est émise par aucune banque centrale.</div></div>
+      <div class="acc-item" style="border:0.5px solid var(--border2)"><div class="acc-head" onclick="toggle(this.parentElement)" style="padding:1rem 1.25rem"><span class="acc-title" style="font-size:13px">Quels sont les risques ?</span><span class="acc-icon">+</span></div><div class="acc-body" style="padding:0 1.25rem 1rem">La crypto est un actif à haute volatilité. Les prix peuvent varier de ±30% en quelques jours. Ne jamais investir plus que ce que l'on peut se permettre de perdre. Diversifier et privilégier les plateformes réglementées et reconnues.</div></div>
+      <div class="acc-item" style="border:0.5px solid var(--border2)"><div class="acc-head" onclick="toggle(this.parentElement)" style="padding:1rem 1.25rem"><span class="acc-title" style="font-size:13px">Comment démarrer depuis le Cameroun ?</span><span class="acc-icon">+</span></div><div class="acc-body" style="padding:0 1.25rem 1rem">Des plateformes comme Binance, Yellow Card ou Paxful acceptent les virements en XAF via Mobile Money. L'inscription nécessite une pièce d'identité (KYC). Commencer par de petits montants et progresser avec l'expérience.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPPORTUNITIES -->
+<section id="opportunities">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Tableau des Opportunités</span><span class="sh-tag">Sélection Éditoriale</span></div>
+    <a class="sh-link" href="#opportunities">Tout afficher →</a>
+  </div>
+  <div class="opp-header"><span>Opportunité</span><span>Secteur</span><span>Potentiel</span><span>Risque</span><span></span></div>
+  <div class="opp-grid">
+    <div class="opp-row"><div class="or-name"><span class="or-title">SpaceX IPO (Partiel)</span><span class="or-cat">Aérospatial · Technologie</span></div><span class="or-val">Espace</span><span class="or-val pos">+200% (5 ans)*</span><span class="risk-badge risk-high">Élevé</span><button class="or-btn">Analyser →</button></div>
+    <div class="opp-row"><div class="or-name"><span class="or-title">Eurobonds Cameroun 2030</span><span class="or-cat">Obligation Souveraine · XAF</span></div><span class="or-val">Obligations</span><span class="or-val pos">7.2% / an</span><span class="risk-badge risk-low">Faible</span><button class="or-btn">Analyser →</button></div>
+    <div class="opp-row"><div class="or-name"><span class="or-title">Fonds Cobalt Africain</span><span class="or-cat">Matière Première · Transition Énergétique</span></div><span class="or-val">Commodités</span><span class="or-val pos">+45% (18 mois)*</span><span class="risk-badge risk-med">Modéré</span><button class="or-btn">Analyser →</button></div>
+    <div class="opp-row"><div class="or-name"><span class="or-title">ETF MSCI Africa</span><span class="or-cat">Fonds Indiciel · Marchés Émergents</span></div><span class="or-val">Actions</span><span class="or-val pos">+18% (12 mois)*</span><span class="risk-badge risk-med">Modéré</span><button class="or-btn">Analyser →</button></div>
+    <div class="opp-row"><div class="or-name"><span class="or-title">MTN Group — Expansion DRC</span><span class="or-cat">Telecom · BRVM</span></div><span class="or-val">Actions</span><span class="or-val pos">+24% (12 mois)*</span><span class="risk-badge risk-med">Modéré</span><button class="or-btn">Analyser →</button></div>
+    <div class="opp-row"><div class="or-name"><span class="or-title">Infrastructure IA — Série B Nairobi</span><span class="or-cat">Startup · Technologie Africaine</span></div><span class="or-val">Private Equity</span><span class="or-val pos">x4–x6 (5 ans)*</span><span class="risk-badge risk-high">Élevé</span><button class="or-btn">Analyser →</button></div>
+  </div>
+  <div class="disclaimer">* Les projections de performance sont basées sur des analyses historiques et modèles prévisionnels à titre illustratif uniquement. Elles ne constituent pas un conseil en investissement. Toute décision d'investissement doit faire l'objet d'une consultation avec un conseiller financier agréé. Les performances passées ne préjugent pas des performances futures.</div>
+</section>
+
+<!-- GUIDANCE -->
+<section id="guidance">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Orientation Portefeuille</span><span class="sh-tag">Analyse Factuelle · Non Personnalisée</span></div>
+  </div>
+  <div class="guidance-grid">
+    <div class="g-card"><div class="gc-head"><span class="gc-signal" style="background:#4CAF75"></span><span class="gc-label">Tendance Positive</span></div><div class="gc-title">Matières Premières Africaines — Momentum Favorable</div><div class="gc-body">Les données COMEX et LME indiquent une demande structurelle soutenue pour les métaux de transition énergétique (cobalt, cuivre, lithium) sur un horizon 12–24 mois, portée par l'électrification mondiale et les politiques climatiques.</div><div class="gc-data"><div class="gc-row"><span class="gc-lbl">Cobalt</span><span class="gc-num up">+18% YTD</span></div><div class="gc-row"><span class="gc-lbl">Cuivre</span><span class="gc-num up">+12% YTD</span></div><div class="gc-row"><span class="gc-lbl">Cacao</span><span class="gc-num up">+62% YTD</span></div></div></div>
+    <div class="g-card"><div class="gc-head"><span class="gc-signal" style="background:#C9A84C"></span><span class="gc-label">Vigilance Recommandée</span></div><div class="gc-title">Obligations — Environnement de Taux en Transition</div><div class="gc-body">Avec la normalisation progressive des taux par les grandes banques centrales (Fed, BCE), les obligations à long terme présentent un rapport risque/rendement à surveiller attentivement. Privilégier les maturités courtes à moyennes.</div><div class="gc-data"><div class="gc-row"><span class="gc-lbl">T-Bill 3 mois US</span><span class="gc-num">5.27%</span></div><div class="gc-row"><span class="gc-lbl">OAT 10 ans France</span><span class="gc-num">3.14%</span></div><div class="gc-row"><span class="gc-lbl">Bons BEAC 3 mois</span><span class="gc-num">4.75%</span></div></div></div>
+    <div class="g-card"><div class="gc-head"><span class="gc-signal" style="background:#4CAF75"></span><span class="gc-label">Opportunité Croissance</span></div><div class="gc-title">Marchés Actions Émergents — Afrique et Asie du Sud-Est</div><div class="gc-body">Les marchés émergents présentent des valorisations attractives par rapport aux marchés développés. Le ratio P/E de l'indice MSCI Emerging Markets reste inférieur de 35% à celui du S&amp;P 500, suggérant un potentiel de rattrapage.</div><div class="gc-data"><div class="gc-row"><span class="gc-lbl">MSCI EM P/E</span><span class="gc-num">13.2x</span></div><div class="gc-row"><span class="gc-lbl">S&amp;P 500 P/E</span><span class="gc-num">21.8x</span></div><div class="gc-row"><span class="gc-lbl">NSE Nigeria</span><span class="gc-num up">+31% YTD</span></div></div></div>
+  </div>
+  <div class="disclaimer">L'orientation de portefeuille présentée est à caractère strictement éditorial et informatif, fondée sur des données de marchés publiques. Elle ne constitue en aucun cas un conseil en investissement au sens de la réglementation COSUMAF / AMF. SOPECAM Capital ne détient pas de licence de gestion d'actifs. Consultez impérativement un professionnel qualifié avant toute décision d'investissement.</div>
+</section>
+
+<!-- LEARN -->
+<section id="learn" class="learn-section">
+  <div class="section-header" style="background:var(--ink2)">
+    <div class="sh-left"><span class="sh-title">Académie Financière</span><span class="sh-tag">De Débutant à Expert</span></div>
+    <a class="sh-link" href="#learn">Tout le Catalogue →</a>
+  </div>
+  <div class="learn-grid">
+    <div class="learn-card"><div class="lc-num">Module 01</div><div class="lc-title">Les Fondamentaux des Marchés Financiers</div><div class="lc-body">Comprendre ce qu'est une action, une obligation, un fonds indiciel (ETF). Comment fonctionnent les bourses de Paris, New York, Lagos. Le rôle de la COSUMAF et de la BRVM pour l'Afrique de l'Ouest et centrale.</div><div class="lc-tags"><span class="lc-level beginner">Débutant</span><span class="lc-tag">Actions</span><span class="lc-tag">ETF</span><span class="lc-tag">BRVM</span></div></div>
+    <div class="learn-card"><div class="lc-num">Module 02</div><div class="lc-title">Lire un Cours Boursier et une Fiche d'Information</div><div class="lc-body">P/E ratio, capitalisation boursière, dividendes, rendements. Savoir interpréter les données de marché présentées sur notre plateforme et ailleurs. Exercices pratiques avec des entreprises africaines cotées.</div><div class="lc-tags"><span class="lc-level beginner">Débutant</span><span class="lc-tag">Analyse</span><span class="lc-tag">Ratios</span></div></div>
+    <div class="learn-card"><div class="lc-num">Module 03</div><div class="lc-title">Crypto et Actifs Numériques — Démystifiés</div><div class="lc-body">Blockchain, Bitcoin, Ethereum expliqués simplement. Stablecoins et leur utilité pour les Africains (couverture, remittances). Risques réels, arnaques à éviter, plateformes fiables disponibles depuis le Cameroun.</div><div class="lc-tags"><span class="lc-level beginner">Débutant</span><span class="lc-tag">Bitcoin</span><span class="lc-tag">Blockchain</span><span class="lc-tag">DeFi</span></div></div>
+    <div class="learn-card"><div class="lc-num">Module 04</div><div class="lc-title">Construire son Premier Portefeuille Diversifié</div><div class="lc-body">La règle 60/40, la diversification géographique et sectorielle, l'horizon d'investissement. Comment allouer entre actions, obligations, matières premières et or selon son profil de risque. Exemples concrets pour 500 000 XAF.</div><div class="lc-tags"><span class="lc-level inter">Intermédiaire</span><span class="lc-tag">Diversification</span><span class="lc-tag">Allocation</span></div></div>
+    <div class="learn-card"><div class="lc-num">Module 05</div><div class="lc-title">Matières Premières Africaines — Opportunité Stratégique</div><div class="lc-body">Le cacao, le cobalt, le pétrole, le bois — comment investir dans ce que l'Afrique produit. Contrats futures, ETF de commodités, actions de sociétés minières et agro-industrielles. Le super-cycle en cours expliqué.</div><div class="lc-tags"><span class="lc-level inter">Intermédiaire</span><span class="lc-tag">Cacao</span><span class="lc-tag">Cobalt</span><span class="lc-tag">Pétrole</span></div></div>
+    <div class="learn-card"><div class="lc-num">Module 06</div><div class="lc-title">IPOs et Private Equity — Accéder aux Entreprises Non Cotées</div><div class="lc-body">Comprendre une introduction en bourse (IPO), comment y participer. Le private equity et les fonds de venture capital — ce qui est accessible aux particuliers. Comment évaluer une startup africaine. Risques spécifiques.</div><div class="lc-tags"><span class="lc-level advanced">Avancé</span><span class="lc-tag">IPO</span><span class="lc-tag">Startup</span><span class="lc-tag">VC</span></div></div>
+  </div>
+</section>
+
+<!-- AFRICA FOCUS -->
+<section id="africa">
+  <div class="section-header">
+    <div class="sh-left"><span class="sh-title">Focus Afrique &amp; Cameroun</span><span class="sh-tag">Perspectives Régionales</span></div>
+    <a class="sh-link" href="#africa">Approfondir →</a>
+  </div>
+  <div class="africa-grid">
+    <div class="af-cell">
+      <div class="af-tag">Cameroun &amp; CEMAC</div>
+      <h3 class="af-title">Le Cameroun à l'Intersection des Grandes Tendances Mondiales</h3>
+      <p class="af-body">La position stratégique du Cameroun comme hub régional d'Afrique Centrale, ses ressources naturelles abondantes et sa dynamique démographique en font un acteur croissant dans les flux d'investissement mondiaux. SOPECAM Capital vous donne les clés pour en tirer parti.</p>
+      <div class="af-list">
+        <div class="af-item">Cacao: 5e producteur mondial, prix en super-cycle, opportunités directes dans l'agri-finance</div>
+        <div class="af-item">Pétrole: production stabilisée, nouvelles concessions offshore en cours de négociation</div>
+        <div class="af-item">Télécoms: taux de pénétration mobile en forte hausse, fintech en pleine émergence</div>
+        <div class="af-item">Infrastructures: programme SND30 ouvre 12 milliards USD de projets à financement mixte</div>
+      </div>
+    </div>
+    <div class="af-cell" style="background:var(--ink2)">
+      <div class="af-tag">Vision SND30</div>
+      <h3 class="af-title">Aligner l'Investissement Privé avec la Stratégie Nationale de Développement</h3>
+      <p class="af-body">La SND30 du Cameroun identifie six axes prioritaires incluant la transformation industrielle, la compétitivité et l'intégration financière. SOPECAM Capital opère en parfaite cohérence avec ces objectifs — car renforcer la culture financière nationale et connecter les citoyens aux marchés mondiaux est précisément un levier de cette vision.</p>
+      <div class="af-list">
+        <div class="af-item">Axe 1 — Transformation Structurelle : accès aux capitaux pour l'industrie locale</div>
+        <div class="af-item">Axe 2 — Compétitivité : intelligence économique pour les acteurs camerounais</div>
+        <div class="af-item">Axe 3 — Capital Humain : éducation financière comme levier de productivité nationale</div>
+        <div class="af-item">Axe 4 — Intégration Régionale : plateforme panafricaine rayonnant depuis Yaoundé</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SND30 FOOTER BAR -->
+<div class="snd-footer">
+  <span class="snd-badge">SND30</span>
+  <p class="snd-text">Plateforme alignée avec les objectifs de la Stratégie Nationale de Développement 2030 du Cameroun — Axe Compétitivité, Transformation Digitale &amp; Intégration Financière Régionale. SOPECAM Capital contribue à l'émergence d'une classe d'investisseurs camerounais éduqués et connectés aux marchés mondiaux.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="brand">
+      <span class="brand-name">SOPECAM CAPITAL</span>
+      <span class="brand-sub">Intelligence Financière Mondiale</span>
+    </div>
+    <p>La plateforme d'intelligence financière de référence d'Afrique Centrale. Données mondiales, analyses éditoriales, éducation financière — depuis Yaoundé pour le monde.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Marchés</h4>
+    <a href="#markets">Actions Mondiales</a>
+    <a href="#markets">Matières Premières</a>
+    <a href="#crypto">Cryptomonnaies</a>
+    <a href="#markets">Devises Forex</a>
+    <a href="#markets">Obligations</a>
+  </div>
+  <div class="footer-col">
+    <h4>Plateforme</h4>
+    <a href="#editorial">Analyses &amp; Actualités</a>
+    <a href="#opportunities">Tableau d'Opportunités</a>
+    <a href="#guidance">Orientation Portefeuille</a>
+    <a href="#learn">Académie Financière</a>
+    <a href="#africa">Focus Afrique</a>
+  </div>
+  <div class="footer-col">
+    <h4>Institution</h4>
+    <a href="#">À Propos de SOPECAM</a>
+    <a href="#">Notre Équipe</a>
+    <a href="#">Partenaires</a>
+    <a href="#">Conformité &amp; Réglementation</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2026 SOPECAM Capital · Tous droits réservés</span>
+  <span>Données à titre informatif uniquement — Pas de conseil en investissement — Réglementation COSUMAF</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// Clock
+function updateClock(){const n=new Date();const p=v=>String(v).padStart(2,'0');document.getElementById('clock').textContent=p(n.getUTCHours())+':'+p(n.getUTCMinutes())+' UTC'}
+setInterval(updateClock,1000);updateClock();
+
+// Ticker
+const ticks=[
+  {sym:'S&P 500',val:'5 842',chg:'+0.74%',up:true},{sym:'NASDAQ',val:'18 901',chg:'+1.02%',up:true},
+  {sym:'BRENT',val:'$93.40',chg:'+1.2%',up:true},{sym:'OR XAU',val:'$3 274',chg:'+0.41%',up:true},
+  {sym:'BTC/USD',val:'$107 420',chg:'+2.3%',up:true},{sym:'ETH/USD',val:'$2 614',chg:'+1.8%',up:true},
+  {sym:'CACAO',val:'$11 240',chg:'+3.7%',up:true},{sym:'EUR/USD',val:'1.0821',chg:'-0.18%',up:false},
+  {sym:'XAF/USD',val:'0.00164',chg:'-0.1%',up:false},{sym:'CUIVRE',val:'$4.82',chg:'+0.6%',up:true},
+  {sym:'BLE',val:'$548',chg:'-0.3%',up:false},{sym:'DAX 40',val:'23 540',chg:'+0.55%',up:true},
+  {sym:'NIKKEI',val:'39 420',chg:'+0.88%',up:true},{sym:'CAC 40',val:'8 140',chg:'+0.32%',up:true},
+  {sym:'COBALT',val:'$28 400',chg:'+1.4%',up:true},{sym:'LITHIUM',val:'$14 200',chg:'+2.1%',up:true}
+];
+const d=[...ticks,...ticks];
+document.getElementById('ticker').innerHTML=d.map(t=>`<span class="tick"><span class="t-sym">${t.sym}</span><span class="t-val">${t.val}</span><span class="${t.up?'t-up':'t-dn'}">${t.chg}</span></span><span class="tick-sep">·</span>`).join('');
+
+// Sparklines for market cards
+function drawSpark(id,data,color){
+  const c=document.getElementById(id);if(!c)return;
+  const ctx=c.getContext('2d');const w=c.width=c.offsetWidth;const h=c.height=48;
+  const mn=Math.min(...data),mx=Math.max(...data);
+  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();
+  data.forEach((v,i)=>{const x=i/(data.length-1)*w;const y=h-(v-mn)/(mx-mn||1)*h*0.8-h*0.1;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+  ctx.stroke()
+}
+const sparkData={
+  'chart-sp500':[5700,5720,5760,5740,5800,5780,5820,5842],
+  'chart-brent':[88,89,87,91,90,93,92,93.4],
+  'chart-gold':[3180,3200,3220,3210,3240,3260,3270,3274],
+  'chart-cocoa':[9800,10200,10500,10800,10600,11000,10900,11240],
+  'chart-dax':[22800,22900,23100,23000,23200,23400,23500,23540],
+  'chart-xaf':[612,611,610,612,610,609,610,609.4]
+};
+setTimeout(()=>{Object.entries(sparkData).forEach(([id,data])=>drawSpark(id,data,id==='chart-xaf'?'#E25B4A':'#4CAF75'))},100);
+
+// Main chart
+const chartDataSets={
+  sp500:{label:'S&P 500',data:[5650,5680,5700,5720,5740,5760,5730,5780,5800,5790,5810,5820,5800,5830,5842],color:'#4CAF75'},
+  gold:{label:'Or XAU/USD',data:[3150,3160,3170,3180,3190,3210,3200,3220,3230,3240,3250,3260,3270,3265,3274],color:'#C9A84C'},
+  oil:{label:'Brent Brut',data:[87,88,87.5,89,90,89.5,91,90.5,92,91.5,93,92.5,93.2,92.8,93.4],color:'#E25B4A'},
+  cocoa:{label:'Cacao $/MT',data:[9800,9900,10000,10100,10200,10400,10300,10500,10600,10700,10800,10900,11000,11100,11240],color:'#8A7D60'},
+  btc:{label:'Bitcoin USD',data:[98000,100000,102000,104000,103000,105000,104000,106000,105000,107000,106500,107200,107000,107400,107420],color:'#C9A84C'}
+};
+const labels=['J1','J2','J3','J4','J5','J6','J7','J8','J9','J10','J11','J12','J13','J14','J15'];
+let mainChart;
+function buildChart(key){
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  const d=chartDataSets[key];
+  if(mainChart)mainChart.destroy();
+  mainChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:d.label,data:d.data,borderColor:d.color,backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(232,228,217,0.04)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:10}}},y:{grid:{color:'rgba(232,228,217,0.06)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:10}}}}}});
+}
+buildChart('sp500');
+
+function updateChart(btn,key){document.querySelectorAll('.chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildChart(key)}
+
+// Market filter tabs
+function filterMkt(tab,cat){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  document.querySelectorAll('.mcard').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none'});
+}
+
+// Accordion
+function toggle(el){el.classList.toggle('open')}
+</script>
+</body>
+</html>
