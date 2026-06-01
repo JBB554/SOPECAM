@@ -109,16 +109,48 @@ section{border-bottom:0.5px solid var(--border)}
 .sh-link{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;text-decoration:none}
 .sh-link:hover{text-decoration:underline}
 
-/* ── MARKETS ── */
-.markets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);padding:1px}
-.mcard{background:var(--ink);padding:1.75rem 2rem;cursor:pointer;transition:background 0.2s}
-.mcard:hover{background:var(--ink2)}
-.mcard-cat{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.22em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem}
-.mcard-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:0.25rem}
-.mcard-price{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--text);margin-bottom:4px}
-.mcard-chg{font-family:'DM Mono',monospace;font-size:11px}
-.mcard-chart{margin-top:1rem;height:48px;width:100%}
-.mcard-desc{font-size:12px;color:var(--text3);margin-top:0.75rem;line-height:1.5}
+/* ── MARKETS — compact list ── */
+.markets-list{display:flex;flex-direction:column}
+.mrow{display:grid;grid-template-columns:1fr 60px auto auto;align-items:center;gap:0.875rem;padding:0.75rem 2rem;border-bottom:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s}
+.mrow:hover{background:var(--ink2)}
+.mr-asset{display:flex;flex-direction:column;gap:1px;min-width:0}
+.mr-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mr-cat{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase}
+.mr-spark{width:60px;height:24px;flex-shrink:0}
+.mr-price{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--text);font-weight:500;text-align:right;white-space:nowrap}
+.mr-chg{font-family:'DM Mono',monospace;font-size:10.5px;text-align:right;white-space:nowrap;min-width:52px}
+/* ── COMPACT CHART BOX ── */
+.chart-compact{padding:1rem 2rem;background:var(--ink2);border-bottom:0.5px solid var(--border2)}
+.chart-compact .chart-controls{display:flex;gap:6px;margin-bottom:0.625rem;flex-wrap:wrap}
+.chart-compact .chart-btn{padding:3px 10px;background:transparent;border:0.5px solid var(--border);color:var(--text3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+.chart-compact .chart-btn.active,.chart-compact .chart-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+#mainChart{width:100%;height:130px!important}
+/* ── PREMIUM ── */
+.premium-section{background:var(--ink2);padding:2.5rem 3rem;border-bottom:0.5px solid var(--border)}
+.prem-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;background:var(--gold-bg);border:0.5px solid rgba(201,168,76,0.3);padding:4px 12px;margin-bottom:1.25rem}
+.prem-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);line-height:1.15;margin-bottom:0.75rem}
+.prem-title em{font-style:italic;color:var(--gold)}
+.prem-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:1.75rem;max-width:600px}
+.plan-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border2);margin-bottom:1.5rem}
+.plan-card{background:var(--ink);padding:1.5rem;position:relative}
+.plan-card.featured{background:linear-gradient(135deg,rgba(201,168,76,0.06),transparent);border:0.5px solid rgba(201,168,76,0.25)}
+.plan-popular{position:absolute;top:0;right:1rem;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px}
+.plan-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:0.5rem}
+.plan-price{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:0.875rem}
+.plan-price span{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);font-weight:400}
+.plan-feats{display:flex;flex-direction:column;gap:5px}
+.pf{font-size:12px;color:var(--text2);display:flex;gap:8px;align-items:flex-start}
+.pf::before{content:'✓';color:var(--green);font-size:10px;flex-shrink:0;margin-top:2px}
+.payment-methods{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;align-items:center}
+.pay-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;width:100%;margin-bottom:2px}
+.pay-chip{display:flex;align-items:center;gap:5px;padding:5px 10px;background:var(--ink);border:0.5px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;color:var(--text2);letter-spacing:0.06em;white-space:nowrap}
+.prem-cta{display:block;text-align:center;padding:13px 32px;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:opacity 0.2s;text-decoration:none;border:none;width:100%}
+.prem-cta:hover{opacity:0.88}
+.prem-note{font-size:11px;color:var(--text3);text-align:center;margin-top:0.625rem;line-height:1.5}
+@media(max-width:768px){
+  .plan-row{grid-template-columns:1fr}
+  .premium-section,.mrow,.chart-compact{padding-left:1.25rem;padding-right:1.25rem}
+}
 
 /* ── EDITORIAL ── */
 .editorial-grid{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border2)}
@@ -341,40 +373,35 @@ footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2f
   </div>
 </div>
 
-<!-- MARKETS -->
+<!-- MARKETS — compact list -->
 <section id="markets">
   <div class="section-header">
     <div class="sh-left"><span class="sh-title">Marchés Mondiaux</span><span class="sh-tag">Temps Réel</span></div>
     <a class="sh-link" href="#markets">Voir Tous →</a>
   </div>
-  <div class="tabs">
-    <div class="tab active" onclick="filterMkt(this,'all')">Tous</div>
-    <div class="tab" onclick="filterMkt(this,'equities')">Actions</div>
-    <div class="tab" onclick="filterMkt(this,'commodities')">Matières</div>
-    <div class="tab" onclick="filterMkt(this,'forex')">Devises</div>
-    <div class="tab" onclick="filterMkt(this,'bonds')">Obligations</div>
+  <div class="markets-list">
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">S&amp;P 500</span><span class="mr-cat">Actions · USA</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,18 8,14 16,15 24,9 32,11 40,5 50,7 60,4" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><span class="mr-price">5 842</span><span class="mr-chg up">▲ +0.74%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">Or XAU/USD</span><span class="mr-cat">Métal Précieux</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,16 8,13 16,10 24,11 32,7 40,8 50,5 60,6" fill="none" stroke="#C9A84C" stroke-width="1.5"/></svg><span class="mr-price">$3 274</span><span class="mr-chg up">▲ +0.41%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">Cacao</span><span class="mr-cat">Agriculture · ICCO</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,20 8,16 16,12 24,8 32,10 40,5 50,6 60,3" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><span class="mr-price">$11 240</span><span class="mr-chg up">▲ +3.7%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">Bitcoin BTC</span><span class="mr-cat">Crypto · BTC/USD</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,14 8,10 16,8 24,4 32,6 40,4 50,2 60,5" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><span class="mr-price">$107 420</span><span class="mr-chg up">▲ +2.3%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">Brent Crude</span><span class="mr-cat">Énergie · ICE</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,8 8,10 16,8 24,12 32,9 40,13 50,10 60,12" fill="none" stroke="#C9A84C" stroke-width="1.5"/></svg><span class="mr-price">$93.40</span><span class="mr-chg up">▲ +1.2%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">USD/XAF</span><span class="mr-cat">Forex · Zone CEMAC</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,6 8,7 16,8 24,7 32,8 40,8 50,9 60,8" fill="none" stroke="#E25B4A" stroke-width="1.5"/></svg><span class="mr-price">609.4</span><span class="mr-chg dn">▼ -0.2%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">DAX 40</span><span class="mr-cat">Actions · Europe</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,14 8,12 16,10 24,12 32,8 40,9 50,7 60,8" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><span class="mr-price">23 540</span><span class="mr-chg up">▲ +0.55%</span></div>
+    <div class="mrow"><div class="mr-asset"><span class="mr-name">EUR/XAF</span><span class="mr-cat">Forex · Parité CFA</span></div><svg class="mr-spark" viewBox="0 0 60 24"><polyline points="0,8 8,8 16,9 24,8 32,8 40,8 50,8 60,8" fill="none" stroke="#4CAF75" stroke-width="1.5"/></svg><span class="mr-price">655.96</span><span class="mr-chg up">Stable</span></div>
   </div>
-  <div class="markets-grid" id="marketsGrid">
-    <div class="mcard" data-cat="equities"><div class="mcard-cat">Actions · USA</div><div class="mcard-name">S&amp;P 500</div><div class="mcard-price">5 842.3</div><div class="mcard-chg up">▲ +43.1 (+0.74%)</div><canvas class="mcard-chart" id="chart-sp500"></canvas><div class="mcard-desc">L'indice phare américain reflète la santé de l'économie mondiale. Hausse portée par le secteur technologique.</div></div>
-    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Énergie · Brent</div><div class="mcard-name">Pétrole Brut</div><div class="mcard-price">$93.40</div><div class="mcard-chg up">▲ +$1.12 (+1.2%)</div><canvas class="mcard-chart" id="chart-brent"></canvas><div class="mcard-desc">Tension géopolitique au Moyen-Orient soutient les prix. Relevé positif pour les exportateurs comme le Cameroun.</div></div>
-    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Métal Précieux</div><div class="mcard-name">Or XAU</div><div class="mcard-price">$3 274</div><div class="mcard-chg up">▲ +$13 (+0.41%)</div><canvas class="mcard-chart" id="chart-gold"></canvas><div class="mcard-desc">Valeur refuge mondiale. En hausse sur fond d'incertitudes macro-économiques globales et de dollar plus faible.</div></div>
-    <div class="mcard" data-cat="commodities"><div class="mcard-cat">Agriculture · ICCO</div><div class="mcard-name">Cacao</div><div class="mcard-price">$11 240/MT</div><div class="mcard-chg up">▲ +$401 (+3.7%)</div><canvas class="mcard-chart" id="chart-cocoa"></canvas><div class="mcard-desc">Le Cameroun, 5e producteur mondial, bénéficie directement de la flambée des prix. Super-cycle en cours.</div></div>
-    <div class="mcard" data-cat="equities"><div class="mcard-cat">Actions · Europe</div><div class="mcard-name">DAX 40</div><div class="mcard-price">23 540</div><div class="mcard-chg up">▲ +130 (+0.55%)</div><canvas class="mcard-chart" id="chart-dax"></canvas><div class="mcard-desc">L'indice allemand consolide sa position. Secteur industriel et automobile en phase de rebond.</div></div>
-    <div class="mcard" data-cat="forex"><div class="mcard-cat">Devises · Forex</div><div class="mcard-name">USD/XAF</div><div class="mcard-price">609.4</div><div class="mcard-chg dn">▼ -1.2 (-0.2%)</div><canvas class="mcard-chart" id="chart-xaf"></canvas><div class="mcard-desc">Le franc CFA, arrimé à l'euro, offre une stabilité structurelle favorable aux investisseurs de la zone CEMAC.</div></div>
+
+  <!-- COMPACT CHART -->
+  <div class="chart-compact">
+    <div class="chart-controls">
+      <button class="chart-btn active" onclick="updateChart(this,'sp500')">S&amp;P 500</button>
+      <button class="chart-btn" onclick="updateChart(this,'gold')">Or</button>
+      <button class="chart-btn" onclick="updateChart(this,'oil')">Brent</button>
+      <button class="chart-btn" onclick="updateChart(this,'cocoa')">Cacao</button>
+      <button class="chart-btn" onclick="updateChart(this,'btc')">Bitcoin</button>
+    </div>
+    <canvas id="mainChart" role="img" aria-label="Graphique 15 jours"></canvas>
   </div>
 </section>
-
-<!-- LIVE CHART -->
-<div class="chart-container">
-  <div class="chart-controls">
-    <button class="chart-btn active" onclick="updateChart(this,'sp500')">S&amp;P 500</button>
-    <button class="chart-btn" onclick="updateChart(this,'gold')">Or</button>
-    <button class="chart-btn" onclick="updateChart(this,'oil')">Pétrole</button>
-    <button class="chart-btn" onclick="updateChart(this,'cocoa')">Cacao</button>
-    <button class="chart-btn" onclick="updateChart(this,'btc')">Bitcoin</button>
-  </div>
-  <canvas id="mainChart" role="img" aria-label="Graphique de prix sur 30 jours"></canvas>
-</div>
 
 <!-- EDITORIAL -->
 <section id="editorial">
@@ -513,6 +540,50 @@ footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2f
   </div>
 </section>
 
+<!-- PREMIUM / SUBSCRIPTIONS -->
+<section id="premium">
+<div class="premium-section">
+  <div class="prem-badge">✦ Accès Premium</div>
+  <h2 class="prem-title">Intelligence sans <em>limites.</em></h2>
+  <p class="prem-desc">Données avancées, analyses quotidiennes, alertes personnalisées, Académie complète et tableau de suivi portefeuille. Conçu pour tous — du primo-investisseur à l'expert. Paiement local, accès immédiat.</p>
+  <div class="plan-row">
+    <div class="plan-card">
+      <div class="plan-name">Accès Libre</div>
+      <div class="plan-price">0 <span>XAF / mois</span></div>
+      <div class="plan-feats">
+        <div class="pf">Marchés en temps réel (8 instruments)</div>
+        <div class="pf">Analyses éditoriales hebdomadaires</div>
+        <div class="pf">Académie — 3 modules gratuits</div>
+        <div class="pf">Application PWA installable</div>
+      </div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-popular">Le Plus Populaire</div>
+      <div class="plan-name">Intelligence Pro</div>
+      <div class="plan-price">4 900 <span>XAF / mois</span></div>
+      <div class="plan-feats">
+        <div class="pf">Tous les marchés + data étendue</div>
+        <div class="pf">Analyses quotidiennes + alertes prix</div>
+        <div class="pf">Académie complète (6 modules)</div>
+        <div class="pf">Tableau suivi portefeuille</div>
+        <div class="pf">Opportunités board exclusif</div>
+        <div class="pf">Hub Diaspora + Simulateur de scénarios</div>
+      </div>
+    </div>
+  </div>
+  <div class="payment-methods">
+    <div class="pay-label">Méthodes de paiement acceptées</div>
+    <div class="pay-chip">📱 MTN Mobile Money</div>
+    <div class="pay-chip">🟠 Orange Money</div>
+    <div class="pay-chip">🅿️ PayPal</div>
+    <div class="pay-chip">💳 Visa / Mastercard</div>
+    <div class="pay-chip">🏦 Virement CEMAC</div>
+  </div>
+  <a href="onboarding.html" class="prem-cta">Commencer Gratuitement — Aucune carte requise →</a>
+  <p class="prem-note">Annulation à tout moment · Données sécurisées · Conforme COSUMAF</p>
+</div>
+</section>
+
 <!-- SND30 FOOTER BAR -->
 <div class="snd-footer">
   <span class="snd-badge">SND30</span>
@@ -594,26 +665,9 @@ const ticks=[
 const d=[...ticks,...ticks];
 document.getElementById('ticker').innerHTML=d.map(t=>`<span class="tick"><span class="t-sym">${t.sym}</span><span class="t-val">${t.val}</span><span class="${t.up?'t-up':'t-dn'}">${t.chg}</span></span><span class="tick-sep">·</span>`).join('');
 
-// Sparklines for market cards
-function drawSpark(id,data,color){
-  const c=document.getElementById(id);if(!c)return;
-  const ctx=c.getContext('2d');const w=c.width=c.offsetWidth;const h=c.height=48;
-  const mn=Math.min(...data),mx=Math.max(...data);
-  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();
-  data.forEach((v,i)=>{const x=i/(data.length-1)*w;const y=h-(v-mn)/(mx-mn||1)*h*0.8-h*0.1;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
-  ctx.stroke()
-}
-const sparkData={
-  'chart-sp500':[5700,5720,5760,5740,5800,5780,5820,5842],
-  'chart-brent':[88,89,87,91,90,93,92,93.4],
-  'chart-gold':[3180,3200,3220,3210,3240,3260,3270,3274],
-  'chart-cocoa':[9800,10200,10500,10800,10600,11000,10900,11240],
-  'chart-dax':[22800,22900,23100,23000,23200,23400,23500,23540],
-  'chart-xaf':[612,611,610,612,610,609,610,609.4]
-};
-setTimeout(()=>{Object.entries(sparkData).forEach(([id,data])=>drawSpark(id,data,id==='chart-xaf'?'#E25B4A':'#4CAF75'))},100);
+// Sparklines now use inline SVG — no canvas needed
 
-// Main chart
+// Main chart (compact 130px)
 const chartDataSets={
   sp500:{label:'S&P 500',data:[5650,5680,5700,5720,5740,5760,5730,5780,5800,5790,5810,5820,5800,5830,5842],color:'#4CAF75'},
   gold:{label:'Or XAU/USD',data:[3150,3160,3170,3180,3190,3210,3200,3220,3230,3240,3250,3260,3270,3265,3274],color:'#C9A84C'},
@@ -627,18 +681,10 @@ function buildChart(key){
   const ctx=document.getElementById('mainChart').getContext('2d');
   const d=chartDataSets[key];
   if(mainChart)mainChart.destroy();
-  mainChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:d.label,data:d.data,borderColor:d.color,backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(232,228,217,0.04)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:10}}},y:{grid:{color:'rgba(232,228,217,0.06)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:10}}}}}});
+  mainChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:d.label,data:d.data,borderColor:d.color,backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0D1017',borderColor:'rgba(232,228,217,0.1)',borderWidth:0.5,titleColor:'#A89F8A',bodyColor:'#E8E4D9',titleFont:{family:'DM Mono',size:9},bodyFont:{family:'DM Mono',size:10}}},scales:{x:{grid:{color:'rgba(232,228,217,0.04)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:7}},y:{grid:{color:'rgba(232,228,217,0.05)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:4}}}}});
 }
 buildChart('sp500');
-
 function updateChart(btn,key){document.querySelectorAll('.chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildChart(key)}
-
-// Market filter tabs
-function filterMkt(tab,cat){
-  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelectorAll('.mcard').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none'});
-}
 
 // Accordion
 function toggle(el){el.classList.toggle('open')}
