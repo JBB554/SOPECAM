@@ -18,39 +18,16 @@
 <meta property="og:description" content="Données de marché en temps réel, analyses éditoriales, éducation financière pour les investisseurs camerounais.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<!-- Fonts — non-blocking -->
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap"></noscript>
-<!-- Chart.js — defer so it never blocks render -->
-<link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-/* System font stack while webfonts load — zero layout shift */
 :root{
   --gold:#C9A84C;--gold-dim:#8A6A20;--gold-bg:rgba(201,168,76,0.08);
   --ink:#0A0C10;--ink2:#0E1118;--ink3:#13161F;
   --text:#E8E4D9;--text2:#A89F8A;--text3:#6B6048;--text4:#3A3020;
   --green:#4CAF75;--red:#E25B4A;--border:rgba(232,228,217,0.1);
-  --f-serif:'Playfair Display',Georgia,'Times New Roman',serif;
-  --f-sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --f-mono:'DM Mono','Courier New',monospace;
-  --safe-b:env(safe-area-inset-bottom,0px);
-}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-rendering:optimizeSpeed}
-body{background:var(--ink);color:var(--text);font-family:var(--f-sans);overflow-x:hidden;min-height:100vh}
-/* Promote ticker and nav to GPU layer — eliminates jank */
-.ticker-inner{will-change:transform;transform:translateZ(0)}
-.nav{will-change:auto;transform:translateZ(0)}
-/* content-visibility: auto on below-fold sections — massive perf win */
-#editorial,#crypto,#opportunities,#guidance,#learn,#africa,#premium{content-visibility:auto;contain-intrinsic-size:0 400px}
-/* Reduce motion for users who prefer it */
-@media(prefers-reduced-motion:reduce){
-  .ticker-inner{animation:none!important}
-  *{transition:none!important;animation:none!important}
-}
   --border2:rgba(232,228,217,0.06);
 }
 html{scroll-behavior:smooth}
@@ -637,9 +614,6 @@ footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2f
     <a href="#guidance">Orientation Portefeuille</a>
     <a href="#learn">Académie Financière</a>
     <a href="#africa">Focus Afrique</a>
-    <a href="track.html">Suivi Portefeuille</a>
-    <a href="simulator.html">Simulateur</a>
-    <a href="diaspora.html">Hub Diaspora</a>
   </div>
   <div class="footer-col">
     <h4>Institution</h4>
@@ -647,15 +621,7 @@ footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2f
     <a href="#">Notre Équipe</a>
     <a href="#">Partenaires</a>
     <a href="#">Conformité &amp; Réglementation</a>
-    <a href="auth.html">Connexion / Inscription</a>
     <a href="#">Contact</a>
-  </div>
-  <div class="footer-col">
-    <h4>Légal</h4>
-    <a href="terms.html">Conditions d'Utilisation</a>
-    <a href="privacy.html">Politique de Confidentialité</a>
-    <a href="#">Avertissement Risques</a>
-    <a href="#">Conformité COSUMAF</a>
   </div>
 </footer>
 <div class="footer-bottom">
@@ -663,87 +629,65 @@ footer{background:var(--ink2);padding:3rem;display:grid;grid-template-columns:2f
   <span>Données à titre informatif uniquement — Pas de conseil en investissement — Réglementation COSUMAF</span>
 </div>
 
-<!-- Chart.js deferred — never blocks first paint -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
-<script src="/lang.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="/lang.js"></script>
 <script>
-// ── CLOCK (lightweight — 60s interval not 1s) ──
-function updateClock(){const n=new Date(),p=v=>String(v).padStart(2,'0');const el=document.getElementById('clock');if(el)el.textContent=p(n.getUTCHours())+':'+p(n.getUTCMinutes())+' UTC'}
-setInterval(updateClock,60000);updateClock();
+// Register Service Worker (PWA)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[PWA] SW registered:', reg.scope))
+      .catch(err => console.warn('[PWA] SW error:', err));
+  });
+}
 
-// ── TICKER (built once, CSS animates it — zero JS cost after init) ──
-(function(){
-  const T=[
-    {s:'S&P 500',v:'5 842',c:'+0.74%',u:1},{s:'NASDAQ',v:'18 901',c:'+1.02%',u:1},
-    {s:'BRENT',v:'$93.40',c:'+1.2%',u:1},{s:'OR',v:'$3 274',c:'+0.41%',u:1},
-    {s:'BTC',v:'$107K',c:'+2.3%',u:1},{s:'ETH',v:'$2 614',c:'+1.8%',u:1},
-    {s:'CACAO',v:'$11 240',c:'+3.7%',u:1},{s:'EUR/USD',v:'1.0821',c:'-0.18%',u:0},
-    {s:'USD/XAF',v:'609.4',c:'-0.1%',u:0},{s:'DAX 40',v:'23 540',c:'+0.55%',u:1},
-    {s:'COBALT',v:'$28K',c:'+1.4%',u:1},{s:'CUIVRE',v:'$4.82',c:'+0.6%',u:1}
-  ];
-  const el=document.getElementById('ticker');
-  if(!el)return;
-  const h=[...T,...T].map(t=>`<span class="tick"><span class="t-sym">${t.s}</span><span class="t-val">${t.v}</span><span class="${t.u?'t-up':'t-dn'}">${t.c}</span></span><span class="tick-sep">·</span>`).join('');
-  el.innerHTML=h;
-})();
+// Onboarding redirect — first-time visitors
+if (!localStorage.getItem('sopecam_onboarded')) {
+  // Soft redirect: show onboarding once
+  // Uncomment below to enable:
+  // window.location.href = '/onboarding.html';
+}
+// Clock
+function updateClock(){const n=new Date();const p=v=>String(v).padStart(2,'0');document.getElementById('clock').textContent=p(n.getUTCHours())+':'+p(n.getUTCMinutes())+' UTC'}
+setInterval(updateClock,1000);updateClock();
 
-// ── CHART — lazy init via IntersectionObserver ──
-let mainChart,chartKey='sp500';
-const chartData={
-  sp500:{l:'S&P 500',d:[5650,5680,5700,5720,5740,5760,5730,5780,5800,5790,5810,5820,5800,5830,5842],c:'#4CAF75'},
-  gold:{l:'Or XAU/USD',d:[3150,3160,3170,3180,3190,3210,3200,3220,3230,3240,3250,3260,3270,3265,3274],c:'#C9A84C'},
-  oil:{l:'Brent',d:[87,88,87.5,89,90,89.5,91,90.5,92,91.5,93,92.5,93.2,92.8,93.4],c:'#E25B4A'},
-  cocoa:{l:'Cacao',d:[9800,9900,10000,10100,10200,10400,10300,10500,10600,10700,10800,10900,11000,11100,11240],c:'#C9A84C'},
-  btc:{l:'Bitcoin',d:[98000,100000,102000,104000,103000,105000,104000,106000,105000,107000,106500,107200,107000,107400,107420],c:'#C9A84C'}
+// Ticker
+const ticks=[
+  {sym:'S&P 500',val:'5 842',chg:'+0.74%',up:true},{sym:'NASDAQ',val:'18 901',chg:'+1.02%',up:true},
+  {sym:'BRENT',val:'$93.40',chg:'+1.2%',up:true},{sym:'OR XAU',val:'$3 274',chg:'+0.41%',up:true},
+  {sym:'BTC/USD',val:'$107 420',chg:'+2.3%',up:true},{sym:'ETH/USD',val:'$2 614',chg:'+1.8%',up:true},
+  {sym:'CACAO',val:'$11 240',chg:'+3.7%',up:true},{sym:'EUR/USD',val:'1.0821',chg:'-0.18%',up:false},
+  {sym:'XAF/USD',val:'0.00164',chg:'-0.1%',up:false},{sym:'CUIVRE',val:'$4.82',chg:'+0.6%',up:true},
+  {sym:'BLE',val:'$548',chg:'-0.3%',up:false},{sym:'DAX 40',val:'23 540',chg:'+0.55%',up:true},
+  {sym:'NIKKEI',val:'39 420',chg:'+0.88%',up:true},{sym:'CAC 40',val:'8 140',chg:'+0.32%',up:true},
+  {sym:'COBALT',val:'$28 400',chg:'+1.4%',up:true},{sym:'LITHIUM',val:'$14 200',chg:'+2.1%',up:true}
+];
+const d=[...ticks,...ticks];
+document.getElementById('ticker').innerHTML=d.map(t=>`<span class="tick"><span class="t-sym">${t.sym}</span><span class="t-val">${t.val}</span><span class="${t.up?'t-up':'t-dn'}">${t.chg}</span></span><span class="tick-sep">·</span>`).join('');
+
+// Sparklines now use inline SVG — no canvas needed
+
+// Main chart (compact 130px)
+const chartDataSets={
+  sp500:{label:'S&P 500',data:[5650,5680,5700,5720,5740,5760,5730,5780,5800,5790,5810,5820,5800,5830,5842],color:'#4CAF75'},
+  gold:{label:'Or XAU/USD',data:[3150,3160,3170,3180,3190,3210,3200,3220,3230,3240,3250,3260,3270,3265,3274],color:'#C9A84C'},
+  oil:{label:'Brent Brut',data:[87,88,87.5,89,90,89.5,91,90.5,92,91.5,93,92.5,93.2,92.8,93.4],color:'#E25B4A'},
+  cocoa:{label:'Cacao $/MT',data:[9800,9900,10000,10100,10200,10400,10300,10500,10600,10700,10800,10900,11000,11100,11240],color:'#8A7D60'},
+  btc:{label:'Bitcoin USD',data:[98000,100000,102000,104000,103000,105000,104000,106000,105000,107000,106500,107200,107000,107400,107420],color:'#C9A84C'}
 };
-const CL=['J1','J2','J3','J4','J5','J6','J7','J8','J9','J10','J11','J12','J13','J14','J15'];
+const labels=['J1','J2','J3','J4','J5','J6','J7','J8','J9','J10','J11','J12','J13','J14','J15'];
+let mainChart;
 function buildChart(key){
-  if(typeof Chart==='undefined')return;
-  const canvas=document.getElementById('mainChart');
-  if(!canvas)return;
-  const d=chartData[key];
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  const d=chartDataSets[key];
   if(mainChart)mainChart.destroy();
-  mainChart=new Chart(canvas,{type:'line',data:{labels:CL,datasets:[{data:d.d,borderColor:d.c,backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:250},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0D1017',borderColor:'rgba(232,228,217,0.1)',borderWidth:.5,titleColor:'#A89F8A',bodyColor:'#E8E4D9',titleFont:{family:'DM Mono',size:9},bodyFont:{family:'DM Mono',size:10}}},scales:{x:{grid:{color:'rgba(232,228,217,0.04)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:7}},y:{grid:{color:'rgba(232,228,217,0.05)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:4}}}}});
+  mainChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:d.label,data:d.data,borderColor:d.color,backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0D1017',borderColor:'rgba(232,228,217,0.1)',borderWidth:0.5,titleColor:'#A89F8A',bodyColor:'#E8E4D9',titleFont:{family:'DM Mono',size:9},bodyFont:{family:'DM Mono',size:10}}},scales:{x:{grid:{color:'rgba(232,228,217,0.04)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:7}},y:{grid:{color:'rgba(232,228,217,0.05)'},ticks:{color:'#6B6048',font:{family:'DM Mono',size:8},maxTicksLimit:4}}}}});
 }
-function updateChart(btn,key){
-  document.querySelectorAll('.chart-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');chartKey=key;buildChart(key);
-}
-const chartCanvas=document.getElementById('mainChart');
-if(chartCanvas){
-  new IntersectionObserver((en,obs)=>{
-    if(en[0].isIntersecting){
-      const poll=()=>typeof Chart!=='undefined'?buildChart(chartKey):setTimeout(poll,80);poll();
-      obs.disconnect();
-    }
-  },{threshold:0.1}).observe(chartCanvas);
-}
+buildChart('sp500');
+function updateChart(btn,key){document.querySelectorAll('.chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildChart(key)}
 
-// ── ACCORDION ──
+// Accordion
 function toggle(el){el.classList.toggle('open')}
-
-// ── PWA INSTALL BANNER ──
-let _dp;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();_dp=e;
-  if(!localStorage.getItem('sc_ni')){const b=document.getElementById('installBanner');if(b)b.style.display='flex';}
-});
-function installApp(){if(!_dp)return;_dp.prompt();_dp.userChoice.then(r=>{if(r.outcome==='accepted')showToast('✅','App installée !');_dp=null;dismissInstall();});}
-function dismissInstall(){const b=document.getElementById('installBanner');if(b)b.style.display='none';localStorage.setItem('sc_ni','1');}
-
-// ── TOAST ──
-let _tt;
-function showToast(icon,msg){
-  const t=document.getElementById('toast');if(!t)return;
-  document.getElementById('toastIcon').textContent=icon;
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-// ── SERVICE WORKER ──
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
-}
 </script>
 </body>
 </html>
