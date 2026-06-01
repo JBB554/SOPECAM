@@ -10,7 +10,15 @@
     { "source": "/learn", "destination": "/index.html" },
     { "source": "/africa", "destination": "/index.html" },
     { "source": "/guidance", "destination": "/index.html" },
-    { "source": "/editorial", "destination": "/index.html" }
+    { "source": "/editorial", "destination": "/index.html" },
+    { "source": "/login", "destination": "/auth.html" },
+    { "source": "/signup", "destination": "/auth.html" },
+    { "source": "/register", "destination": "/auth.html" },
+    { "source": "/diaspora", "destination": "/diaspora.html" },
+    { "source": "/simulator", "destination": "/simulator.html" },
+    { "source": "/portfolio", "destination": "/track.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy", "destination": "/privacy.html" }
   ],
   "headers": [
     {
@@ -41,13 +49,19 @@
       "source": "/(.*\\.svg)",
       "headers": [
         { "key": "Content-Type", "value": "image/svg+xml" },
-        { "key": "Cache-Control", "value": "public, max-age=604800" }
+        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
       ]
     },
     {
       "source": "/(.*\\.js)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/(.*\\.html)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=3600" }
       ]
     }
   ]

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SOPECAM Capital — Simulateur de Portefeuille</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#C9A84C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--gold:#C9A84C;--gold-soft:rgba(201,168,76,0.10);--gold-line:rgba(201,168,76,0.22);--ink:#090B0F;--ink2:#0D0F14;--ink3:#111419;--text:#EAE6DB;--text2:#A8A090;--text3:#5E5848;--text4:#2E2A1E;--green:#3DB870;--red:#E05040;--border:rgba(234,230,219,0.09);--border2:rgba(234,230,219,0.05)}
+html,body{min-height:100vh;background:var(--ink);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;overflow-x:hidden}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:.875rem 2rem;border-bottom:.5px solid var(--border);background:rgba(9,11,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(14px)}
+.brand-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;letter-spacing:.06em}
+.brand-sub{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;display:block;margin-top:2px}
+.nav-back{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--gold)}
+/* LAYOUT */
+.page{display:grid;grid-template-columns:380px 1fr;min-height:calc(100vh - 52px)}
+.panel-left{background:var(--ink2);border-right:.5px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.panel-right{background:var(--ink);overflow-y:auto;display:flex;flex-direction:column}
+.ph{padding:.875rem 1.5rem;border-bottom:.5px solid var(--border2)}
+.ph-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text)}
+.ph-tag{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase}
+/* FORM CONTROLS */
+.sim-group{padding:.875rem 1.5rem;border-bottom:.5px solid var(--border2)}
+.sim-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
+.sim-val{color:var(--gold);font-weight:500}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:2px;background:var(--border);outline:none;border-radius:0;cursor:pointer;margin:4px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--gold);cursor:pointer;border-radius:0}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold);cursor:pointer;border-radius:0;border:none}
+.alloc-grid{display:flex;flex-direction:column;gap:.5rem;margin-top:.375rem}
+.alloc-row{display:flex;align-items:center;gap:.75rem}
+.alloc-label{font-size:12px;color:var(--text2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alloc-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);width:36px;text-align:right;flex-shrink:0}
+.alloc-bar-wrap{flex:1;height:3px;background:var(--border);position:relative}
+.alloc-bar{height:100%;transition:width .4s ease}
+/* SCENARIO TABS */
+.scen-tabs{display:flex;gap:0;padding:.875rem 1.5rem;border-bottom:.5px solid var(--border2);overflow-x:auto;scrollbar-width:none}
+.scen-tabs::-webkit-scrollbar{display:none}
+.scen-tab{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .875rem;border:.5px solid var(--border);color:var(--text3);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.scen-tab+.scen-tab{margin-left:-.5px}
+.scen-tab.active,.scen-tab:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
+/* RESULTS */
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2)}
+.res-card{background:var(--ink2);padding:1.25rem 1.5rem}
+.res-label{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:.5rem}
+.res-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:3px}
+.res-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3)}
+.res-val.pos{color:var(--green)}.res-val.neg{color:var(--red)}.res-val.gold{color:var(--gold)}
+/* CHART */
+.chart-area{padding:1.25rem 1.5rem;flex:1;display:flex;flex-direction:column}
+.chart-title{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem}
+.bar-chart{display:flex;flex-direction:column;gap:.625rem;flex:1}
+.yr-row{display:flex;align-items:center;gap:.75rem}
+.yr-lbl{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text3);width:32px;flex-shrink:0}
+.yr-bar-wrap{flex:1;height:20px;background:var(--border2);position:relative;overflow:hidden}
+.yr-bar{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:.5rem;transition:width .6s ease;position:relative}
+.yr-bar-lbl{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;white-space:nowrap;position:absolute;right:.5rem}
+.yr-pct{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text3);width:52px;text-align:right;flex-shrink:0}
+/* ALLOCATION DONUT (CSS) */
+.donut-wrap{padding:1.25rem 1.5rem;border-bottom:.5px solid var(--border2)}
+.donut-title{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem}
+.alloc-legend{display:flex;flex-direction:column;gap:.4rem}
+.leg-row{display:flex;align-items:center;gap:.5rem;font-size:12px;color:var(--text2)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leg-val{margin-left:auto;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--text)}
+/* RUN BUTTON */
+.run-btn{margin:1.25rem 1.5rem;padding:12px;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;transition:opacity .2s;width:calc(100% - 3rem)}
+.run-btn:hover{opacity:.88}
+/* DISCLAIMER */
+.disclaimer{padding:.875rem 1.5rem;font-size:10.5px;color:var(--text4);line-height:1.55;font-style:italic;border-top:.5px solid var(--border2)}
+@media(max-width:768px){
+  .page{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .panel-left{max-height:none}
+  .nav{padding:.875rem 1.25rem}
+  .results-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div>
+    <span class="brand-name">SOPECAM CAPITAL</span>
+    <span class="brand-sub">Simulateur de Portefeuille — Éducatif</span>
+  </div>
+  <a href="/index.html" class="nav-back">← Accueil</a>
+</nav>
+
+<div class="page">
+  <!-- LEFT CONTROLS -->
+  <div class="panel-left">
+    <div class="ph" style="padding:.875rem 1.5rem;border-bottom:.5px solid var(--border2)">
+      <div class="ph-title">Paramètres</div>
+      <div class="ph-tag">Configurez votre simulation</div>
+    </div>
+
+    <!-- CAPITAL -->
+    <div class="sim-group">
+      <div class="sim-label">Capital Initial <span class="sim-val" id="capVal">1 000 000 XAF</span></div>
+      <input type="range" id="capital" min="100000" max="50000000" step="100000" value="1000000" oninput="updateSim()">
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);margin-top:4px"><span>100K XAF</span><span>50M XAF</span></div>
+    </div>
+
+    <!-- HORIZON -->
+    <div class="sim-group">
+      <div class="sim-label">Horizon de Placement <span class="sim-val" id="horVal">5 ans</span></div>
+      <input type="range" id="horizon" min="1" max="20" step="1" value="5" oninput="updateSim()">
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);margin-top:4px"><span>1 an</span><span>20 ans</span></div>
+    </div>
+
+    <!-- VERSEMENT MENSUEL -->
+    <div class="sim-group">
+      <div class="sim-label">Versement Mensuel <span class="sim-val" id="monthlyVal">50 000 XAF</span></div>
+      <input type="range" id="monthly" min="0" max="2000000" step="10000" value="50000" oninput="updateSim()">
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);margin-top:4px"><span>0</span><span>2M XAF/mois</span></div>
+    </div>
+
+    <!-- SCÉNARIOS -->
+    <div class="sim-group">
+      <div class="sim-label">Scénario</div>
+      <div class="scen-tabs">
+        <div class="scen-tab active" onclick="setScenario('conservateur',this)">Conservateur</div>
+        <div class="scen-tab" onclick="setScenario('equilibre',this)">Équilibré</div>
+        <div class="scen-tab" onclick="setScenario('croissance',this)">Croissance</div>
+        <div class="scen-tab" onclick="setScenario('agressif',this)">Agressif</div>
+      </div>
+    </div>
+
+    <!-- ALLOCATION -->
+    <div class="donut-wrap">
+      <div class="donut-title">Allocation Cible</div>
+      <div class="alloc-legend" id="allocLegend"></div>
+    </div>
+
+    <button class="run-btn" onclick="updateSim()">▶ Simuler</button>
+
+    <div class="disclaimer">Simulation à titre éducatif uniquement. Les rendements affichés sont des projections basées sur des moyennes historiques. Ils ne garantissent en aucun cas les performances futures. SOPECAM Capital ne fournit pas de conseil en investissement.</div>
+  </div>
+
+  <!-- RIGHT RESULTS -->
+  <div class="panel-right">
+    <div class="ph" style="border-bottom:.5px solid var(--border2)">
+      <div class="ph-title" id="resTitle">Scénario Conservateur</div>
+      <div class="ph-tag" id="resTag">Obligations 60% · Or 20% · Actions 20%</div>
+    </div>
+
+    <div class="results-grid">
+      <div class="res-card"><div class="res-label">Valeur Finale</div><div class="res-val gold" id="finalVal">—</div><div class="res-sub" id="finalSub">Projection</div></div>
+      <div class="res-card"><div class="res-label">Gain Total</div><div class="res-val pos" id="gainVal">—</div><div class="res-sub" id="gainPct">—</div></div>
+      <div class="res-card"><div class="res-label">Rendement Annuel</div><div class="res-val" id="annualVal">—</div><div class="res-sub" id="annualSub">CAGR estimé</div></div>
+    </div>
+
+    <div class="chart-area">
+      <div class="chart-title">Progression Année par Année</div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCENARIOS = {
+  conservateur: {name:'Conservateur',tag:'Obligations 60% · Or 20% · Actions 20%',rate:0.065,alloc:[{l:'Obligations',p:60,c:'#4CAF75'},{l:'Or',p:20,c:'#C9A84C'},{l:'Actions',p:20,c:'#4A90D9'}]},
+  equilibre:    {name:'Équilibré',   tag:'Actions 40% · Obligations 40% · Or 20%',rate:0.09, alloc:[{l:'Actions',p:40,c:'#4A90D9'},{l:'Obligations',p:40,c:'#4CAF75'},{l:'Or',p:20,c:'#C9A84C'}]},
+  croissance:   {name:'Croissance',  tag:'Actions 60% · Commodités 25% · Bonds 15%',rate:0.12,alloc:[{l:'Actions',p:60,c:'#4A90D9'},{l:'Commodités',p:25,c:'#C9A84C'},{l:'Obligations',p:15,c:'#4CAF75'}]},
+  agressif:     {name:'Agressif',    tag:'Actions 50% · Crypto 30% · Matières 20%',rate:0.175,alloc:[{l:'Actions',p:50,c:'#4A90D9'},{l:'Crypto',p:30,c:'#E05040'},{l:'Matières',p:20,c:'#C9A84C'}]},
+};
+let curScen = 'conservateur';
+
+function setScenario(key, btn) {
+  curScen = key;
+  document.querySelectorAll('.scen-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  updateSim();
+}
+
+function fmt(n){return Math.round(n).toLocaleString('fr-FR');}
+
+function updateSim() {
+  const capital = parseInt(document.getElementById('capital').value);
+  const horizon = parseInt(document.getElementById('horizon').value);
+  const monthly = parseInt(document.getElementById('monthly').value);
+  const sc = SCENARIOS[curScen];
+  const r = sc.rate;
+
+  document.getElementById('capVal').textContent = fmt(capital)+' XAF';
+  document.getElementById('horVal').textContent = horizon+' an'+(horizon>1?'s':'');
+  document.getElementById('monthlyVal').textContent = fmt(monthly)+' XAF';
+  document.getElementById('resTitle').textContent = 'Scénario '+sc.name;
+  document.getElementById('resTag').textContent = sc.tag;
+
+  // Compound calc with monthly contributions
+  let val = capital;
+  const monthlyRate = r / 12;
+  const yearlyData = [];
+  for (let y = 1; y <= horizon; y++) {
+    for (let m = 0; m < 12; m++) { val = val * (1 + monthlyRate) + monthly; }
+    yearlyData.push(val);
+  }
+  const finalVal = yearlyData[yearlyData.length - 1];
+  const totalInvested = capital + monthly * 12 * horizon;
+  const gain = finalVal - totalInvested;
+  const cagr = (Math.pow(finalVal / capital, 1 / horizon) - 1) * 100;
+
+  document.getElementById('finalVal').textContent = fmt(finalVal)+' XAF';
+  document.getElementById('finalSub').textContent = 'Investi: '+fmt(totalInvested)+' XAF';
+  document.getElementById('gainVal').textContent = (gain>=0?'+':'')+fmt(gain)+' XAF';
+  document.getElementById('gainPct').textContent = '+'+((gain/totalInvested*100).toFixed(1))+'% total';
+  document.getElementById('annualVal').textContent = cagr.toFixed(1)+'%';
+  document.getElementById('annualSub').textContent = r*100+'% taux hypothèse';
+
+  // Bar chart
+  const maxVal = finalVal;
+  const bc = document.getElementById('barChart');
+  const step = Math.max(1, Math.ceil(horizon / 10));
+  const rows = yearlyData.filter((_,i) => (i+1) % step === 0 || i === horizon-1);
+  const rowYears = yearlyData.map((_,i)=>i+1).filter(y => y % step === 0 || y === horizon);
+  bc.innerHTML = rows.map((v,i) => {
+    const pct = (v / maxVal * 100).toFixed(1);
+    const isPos = v > totalInvested;
+    return `<div class="yr-row"><div class="yr-lbl">An ${rowYears[i]}</div><div class="yr-bar-wrap"><div class="yr-bar" style="width:${pct}%;background:${isPos?sc.alloc[0].c:'#E05040'}20;border-right:2px solid ${isPos?sc.alloc[0].c:'#E05040'}"><span class="yr-bar-lbl" style="color:${isPos?sc.alloc[0].c:'#E05040'}">${fmt(v)}</span></div></div><div class="yr-pct">${isPos?'+':''}${((v/capital-1)*100).toFixed(0)}%</div></div>`;
+  }).join('');
+
+  // Allocation legend
+  const al = document.getElementById('allocLegend');
+  al.innerHTML = sc.alloc.map(a=>`<div class="leg-row"><span class="leg-dot" style="background:${a.c}"></span>${a.l}<span class="leg-val">${a.p}%</span></div>`).join('');
+}
+
+updateSim();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

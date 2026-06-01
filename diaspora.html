@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SOPECAM Capital — Hub Diaspora</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#C9A84C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="La passerelle entre la diaspora camerounaise et les marchés mondiaux. Investissez depuis n'importe où dans le monde.">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--gold:#C9A84C;--gold-soft:rgba(201,168,76,0.10);--gold-line:rgba(201,168,76,0.22);--ink:#090B0F;--ink2:#0D0F14;--ink3:#111419;--text:#EAE6DB;--text2:#A8A090;--text3:#5E5848;--text4:#2E2A1E;--green:#3DB870;--red:#E05040;--blue:#4A90D9;--border:rgba(234,230,219,0.09);--border2:rgba(234,230,219,0.05)}
+html,body{min-height:100vh;background:var(--ink);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:.875rem 2rem;border-bottom:.5px solid var(--border);background:rgba(9,11,15,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(14px)}
+.brand-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;letter-spacing:.06em}
+.brand-sub{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;display:block;margin-top:2px}
+.nav-back{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);transition:color .2s}
+.nav-back:hover{color:var(--gold)}
+/* HERO */
+.hero{padding:2.5rem 2rem;border-bottom:.5px solid var(--border);background:linear-gradient(180deg,var(--ink2) 0%,var(--ink) 100%)}
+.h-tag{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.24em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.h-tag::before{content:'';width:16px;height:.5px;background:var(--gold)}
+.h-title{font-family:'Playfair Display',serif;font-size:clamp(26px,6vw,42px);font-weight:700;color:var(--text);line-height:1.08;margin-bottom:.875rem}
+.h-title em{font-style:italic;color:var(--gold)}
+.h-desc{font-size:13.5px;color:var(--text2);line-height:1.72;max-width:560px;margin-bottom:1.5rem}
+.h-ctas{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+.btn-gold{padding:11px 24px;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:opacity .2s;display:inline-block}
+.btn-gold:hover{opacity:.88}
+.btn-ghost{padding:10px 20px;background:transparent;color:var(--gold);border:.5px solid var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:inline-block;transition:background .2s}
+.btn-ghost:hover{background:var(--gold-soft)}
+/* CITIES BAR */
+.cities-bar{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-bottom:.5px solid var(--border2);background:var(--ink2)}
+.cities-bar::-webkit-scrollbar{display:none}
+.city-chip{display:flex;flex-direction:column;align-items:center;padding:.75rem 1.25rem;border-right:.5px solid var(--border2);cursor:pointer;flex-shrink:0;transition:background .2s;border-bottom:1.5px solid transparent}
+.city-chip:hover,.city-chip.active{background:var(--ink3);border-bottom-color:var(--gold)}
+.city-flag{font-size:18px;margin-bottom:3px}
+.city-name{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase}
+.city-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--text);font-weight:500;margin-top:1px}
+/* CONTENT GRID */
+.c-grid{display:grid;grid-template-columns:1fr 320px;gap:1px;background:var(--border2);min-height:50vh}
+.c-main{background:var(--ink);display:flex;flex-direction:column}
+.c-side{background:var(--ink2);display:flex;flex-direction:column}
+/* SECTION HEADS */
+.sh{padding:.875rem 1.5rem;border-bottom:.5px solid var(--border2);display:flex;justify-content:space-between;align-items:center}
+.sh-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text)}
+.sh-tag{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase}
+/* REMITTANCE CALCULATOR */
+.calc-wrap{padding:1.25rem 1.5rem;border-bottom:.5px solid var(--border2)}
+.calc-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:.5rem;display:block}
+.calc-row{display:grid;grid-template-columns:1fr auto 1fr;gap:.75rem;align-items:center;margin-bottom:1rem}
+.calc-input-wrap{display:flex;flex-direction:column;gap:.375rem}
+.calc-input{width:100%;background:var(--ink3);border:.5px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:16px;padding:.625rem .875rem;outline:none;transition:border-color .2s}
+.calc-input:focus{border-color:var(--gold)}
+.calc-arrow{font-size:18px;color:var(--gold);text-align:center;flex-shrink:0}
+.calc-currency{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+.calc-result{background:var(--ink3);border:.5px solid var(--gold-line);padding:1rem;margin-bottom:.875rem}
+.cr-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.35rem}
+.cr-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--gold)}
+.cr-sub{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text3);margin-top:4px}
+.calc-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5px;background:var(--border2);margin-bottom:.875rem}
+.cb-cell{background:var(--ink);padding:.625rem .75rem}
+.cb-label{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.cb-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);font-weight:500}
+/* INVESTMENT ROUTES */
+.route-card{padding:1rem 1.5rem;border-bottom:.5px solid var(--border2);display:flex;gap:1rem;align-items:flex-start;cursor:pointer;transition:background .2s}
+.route-card:hover{background:var(--ink2)}
+.rc-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.rc-body{flex:1}
+.rc-title{font-family:'Playfair Display',serif;font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.rc-desc{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:.5rem}
+.rc-tags{display:flex;gap:.375rem;flex-wrap:wrap}
+.rc-tag{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:.5px solid var(--border);color:var(--text3)}
+.rc-arrow{color:var(--text3);font-size:14px;flex-shrink:0;margin-top:4px;transition:color .2s}
+.route-card:hover .rc-arrow{color:var(--gold)}
+/* SIDE PANEL */
+.side-sect{padding:1rem 1.25rem;border-bottom:.5px solid var(--border2)}
+.side-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem}
+.transfer-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:.5px solid var(--border2)}
+.transfer-item:last-child{border-bottom:none}
+.ti-name{font-size:12.5px;color:var(--text)}
+.ti-fee{font-family:'DM Mono',monospace;font-size:11px}
+.ti-fee.good{color:var(--green)}
+.ti-fee.ok{color:var(--gold)}
+.faq-item{padding:.75rem 0;border-bottom:.5px solid var(--border2);cursor:pointer}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:13px;color:var(--text);display:flex;justify-content:space-between;gap:.5rem;font-weight:500}
+.faq-a{font-size:12px;color:var(--text2);line-height:1.6;margin-top:.5rem;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-icon{color:var(--gold);font-size:14px;flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+/* NEWSLETTER */
+.newsletter{padding:1.5rem;background:var(--gold-soft);border:.5px solid var(--gold-line);margin:1.25rem}
+.nl-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:.375rem}
+.nl-desc{font-size:12px;color:var(--text2);margin-bottom:.875rem;line-height:1.55}
+.nl-input{width:100%;background:var(--ink);border:.5px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:.625rem .875rem;outline:none;margin-bottom:.5rem;transition:border-color .2s}
+.nl-input:focus{border-color:var(--gold)}
+.nl-btn{width:100%;padding:.75rem;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;font-weight:500;transition:opacity .2s}
+.nl-btn:hover{opacity:.88}
+.nl-note{font-size:10px;color:var(--text3);margin-top:.375rem;text-align:center}
+/* DISCLAIMER */
+.disclaimer{padding:.75rem 1.5rem;font-size:10.5px;color:var(--text4);line-height:1.55;font-style:italic;border-top:.5px solid var(--border2)}
+@media(max-width:768px){
+  .c-grid{grid-template-columns:1fr}
+  .c-side{display:none}
+  .nav{padding:.875rem 1.25rem}
+  .hero{padding:1.75rem 1.25rem}
+  .sh,.calc-wrap,.route-card,.disclaimer{padding-left:1.25rem;padding-right:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div>
+    <span class="brand-name">SOPECAM CAPITAL</span>
+    <span class="brand-sub">Hub Diaspora · Investir depuis Partout</span>
+  </div>
+  <a href="/index.html" class="nav-back">← Accueil</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="h-tag">Diaspora Camerounaise · 4+ Millions dans le Monde</div>
+  <h1 class="h-title">Votre argent travaille<br><em>pour vous, partout.</em></h1>
+  <p class="h-desc">La diaspora camerounaise envoie plus de 2 milliards USD chaque année. Imaginez si une partie de ces flux était investie stratégiquement — au Cameroun et sur les marchés mondiaux. Ce hub est votre passerelle.</p>
+  <div class="h-ctas">
+    <a href="/auth.html" class="btn-gold">Ouvrir mon Compte →</a>
+    <a href="#routes" class="btn-ghost">Découvrir les Opportunités</a>
+  </div>
+</div>
+
+<!-- CITIES TIME BAR -->
+<div class="cities-bar">
+  <div class="city-chip active"><div class="city-flag">🇨🇲</div><div class="city-name">Yaoundé</div><div class="city-time" data-tz="Africa/Douala">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇫🇷</div><div class="city-name">Paris</div><div class="city-time" data-tz="Europe/Paris">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇬🇧</div><div class="city-name">Londres</div><div class="city-time" data-tz="Europe/London">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇩🇪</div><div class="city-name">Berlin</div><div class="city-time" data-tz="Europe/Berlin">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇺🇸</div><div class="city-name">New York</div><div class="city-time" data-tz="America/New_York">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇨🇦</div><div class="city-name">Montréal</div><div class="city-time" data-tz="America/Toronto">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇦🇪</div><div class="city-name">Dubaï</div><div class="city-time" data-tz="Asia/Dubai">--:--</div></div>
+  <div class="city-chip"><div class="city-flag">🇨🇳</div><div class="city-name">Shanghai</div><div class="city-time" data-tz="Asia/Shanghai">--:--</div></div>
+</div>
+
+<div class="c-grid">
+  <!-- MAIN -->
+  <div class="c-main">
+    <!-- CALCULATEUR -->
+    <div class="sh"><span class="sh-title">Calculateur de Transfert</span><span class="sh-tag">Éducatif · Estimatif</span></div>
+    <div class="calc-wrap">
+      <div class="calc-row">
+        <div class="calc-input-wrap">
+          <span class="calc-currency">Montant à envoyer (EUR)</span>
+          <input type="number" class="calc-input" id="sendAmt" value="500" oninput="calcTransfer()">
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-input-wrap">
+          <span class="calc-currency">Reçu à Yaoundé (XAF)</span>
+          <input type="number" class="calc-input" id="recvAmt" value="" readonly style="opacity:.7;cursor:default">
+        </div>
+      </div>
+      <div class="calc-result">
+        <div class="cr-label">Montant Estimé Reçu</div>
+        <div class="cr-val" id="crVal">327 980 XAF</div>
+        <div class="cr-sub" id="crSub">Taux indicatif: 1 EUR ≈ 655.96 XAF · Frais: ~2–5%</div>
+      </div>
+      <div class="calc-breakdown">
+        <div class="cb-cell"><div class="cb-label">Taux de Change</div><div class="cb-val">655.96</div></div>
+        <div class="cb-cell"><div class="cb-label">Frais Estimés</div><div class="cb-val" id="cbFees">~2.5%</div></div>
+        <div class="cb-cell"><div class="cb-label">Délai Indicatif</div><div class="cb-val">Immédiat</div></div>
+      </div>
+      <p style="font-size:10.5px;color:var(--text3);font-style:italic">Calculateur éducatif. Taux et frais réels varient selon le prestataire. Comparez toujours avant d'envoyer.</p>
+    </div>
+
+    <!-- ROUTES D'INVESTISSEMENT -->
+    <div id="routes">
+      <div class="sh" style="margin-top:.5px"><span class="sh-title">Voies d'Investissement</span><span class="sh-tag">Guide Éditorial</span></div>
+      <div class="route-card">
+        <div class="rc-icon">🏛️</div>
+        <div class="rc-body">
+          <div class="rc-title">Eurobonds Cameroun — Obligations Souveraines</div>
+          <div class="rc-desc">Investir directement dans la dette d'État camerounaise. Rendement ~7.2%/an. Accessible aux non-résidents via des intermédiaires agréés. Option idéale pour sécuriser un retour au pays.</div>
+          <div class="rc-tags"><span class="rc-tag">Faible Risque</span><span class="rc-tag">Rendement Fixe</span><span class="rc-tag">Via Broker</span></div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+      <div class="route-card">
+        <div class="rc-icon">📊</div>
+        <div class="rc-body">
+          <div class="rc-title">ETFs Actions Mondiales — Bourse Locale</div>
+          <div class="rc-desc">Accéder aux marchés américain, européen ou africain via des fonds indiciels. Accessible depuis l'Europe ou les USA avec un compte titres ou PEA. Pas de capital minimum élevé.</div>
+          <div class="rc-tags"><span class="rc-tag">Actions Mondiales</span><span class="rc-tag">ETF</span><span class="rc-tag">Depuis l'Étranger</span></div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+      <div class="route-card">
+        <div class="rc-icon">🌾</div>
+        <div class="rc-body">
+          <div class="rc-title">Matières Premières Africaines — Cacao, Cobalt, Pétrole</div>
+          <div class="rc-desc">Profiter du super-cycle des commodités africaines via des ETF sectoriels ou des sociétés cotées. Exposition directe à l'économie dont le Cameroun est acteur central.</div>
+          <div class="rc-tags"><span class="rc-tag">Commodités</span><span class="rc-tag">Super-Cycle</span><span class="rc-tag">Modéré</span></div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+      <div class="route-card">
+        <div class="rc-icon">🏘️</div>
+        <div class="rc-body">
+          <div class="rc-title">Immobilier Cameroun — Investir à Distance</div>
+          <div class="rc-desc">Le marché immobilier de Yaoundé et Douala offre des rendements locatifs de 6–10%/an. Guide des mécanismes légaux pour acquérir à distance, gérer par procuration, et sécuriser le titre foncier.</div>
+          <div class="rc-tags"><span class="rc-tag">Immobilier</span><span class="rc-tag">Rendement Locatif</span><span class="rc-tag">Titre Foncier</span></div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+      <div class="route-card">
+        <div class="rc-icon">🚀</div>
+        <div class="rc-body">
+          <div class="rc-title">Startups Africaines — Accès au Capital de Croissance</div>
+          <div class="rc-desc">Participer à la croissance des startups africaines via des plateformes de crowdfunding agréées ou des fonds VC panafricains. Ticket d'entrée dès 500 EUR. Risque élevé, potentiel de rendement exceptionnel.</div>
+          <div class="rc-tags"><span class="rc-tag">Startups</span><span class="rc-tag">VC</span><span class="rc-tag">Risque Élevé</span></div>
+        </div>
+        <div class="rc-arrow">→</div>
+      </div>
+      <div class="disclaimer">Les voies d'investissement décrites sont à titre éducatif et informatif. SOPECAM Capital n'est pas un intermédiaire financier. Tout investissement comporte des risques. Consultez un conseiller agréé COSUMAF ou l'autorité financière de votre pays de résidence.</div>
+    </div>
+  </div>
+
+  <!-- SIDE -->
+  <div class="c-side">
+    <div class="side-sect">
+      <div class="side-label">Coût des Transferts — Comparatif</div>
+      <div class="transfer-item"><span class="ti-name">Mobile Money (MTN/OM)</span><span class="ti-fee good">~2%</span></div>
+      <div class="transfer-item"><span class="ti-name">Western Union</span><span class="ti-fee ok">~4.5%</span></div>
+      <div class="transfer-item"><span class="ti-name">MoneyGram</span><span class="ti-fee ok">~4.2%</span></div>
+      <div class="transfer-item"><span class="ti-name">Wave</span><span class="ti-fee good">~1%</span></div>
+      <div class="transfer-item"><span class="ti-name">Virement SEPA + Banque</span><span class="ti-fee ok">~5–8%</span></div>
+      <div class="transfer-item"><span class="ti-name">Wise (Transferwise)</span><span class="ti-fee good">~0.7%</span></div>
+    </div>
+
+    <div class="side-sect">
+      <div class="side-label">Questions Fréquentes</div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Puis-je investir au Cameroun depuis l'Europe ? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Oui. Les non-résidents peuvent investir en obligations d'État, actions cotées, ou immobilier via des intermédiaires agréés. Certaines contraintes de change s'appliquent dans la zone CEMAC — un conseiller spécialisé est recommandé.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Quelle imposition sur mes revenus d'investissement ? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Dépend de votre pays de résidence et des conventions fiscales bilatérales. En général : plus-values imposées au pays de résidence, dividendes potentiellement soumis à retenue à la source au Cameroun. Consultez un expert fiscal transfrontalier.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Comment rapatrier mes gains ? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Les transferts depuis la zone CEMAC sont soumis à la réglementation de la BEAC. Des autorisations de change sont requises au-delà de certains seuils. Mobile Money reste le canal le plus fluide pour les petits montants.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Quel montant minimum pour commencer ? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Il n'existe pas de minimum universel. Les ETF sont accessibles dès 10–50 EUR sur certaines plateformes européennes. Les obligations souveraines peuvent nécessiter 1 000 EUR minimum. L'immobilier camerounais : dès 5–10 millions XAF dans les villes secondaires.</div>
+      </div>
+    </div>
+
+    <div class="newsletter">
+      <div class="nl-title">La Lettre Diaspora</div>
+      <div class="nl-desc">Chaque vendredi : opportunités, taux de change, actualités financières — pensé pour vivre à l'étranger et investir en Afrique.</div>
+      <input type="email" class="nl-input" placeholder="votre@email.com">
+      <button class="nl-btn" onclick="showToast('📧','Abonnement confirmé ! Votre première lettre arrive vendredi.')">S'abonner Gratuitement</button>
+      <p class="nl-note">+2 400 abonnés · Aucun spam · Désabonnement en un clic</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// City clocks
+function updateCityTimes(){
+  document.querySelectorAll('[data-tz]').forEach(el=>{
+    try{const t=new Date().toLocaleTimeString('fr-FR',{timeZone:el.dataset.tz,hour:'2-digit',minute:'2-digit'});el.textContent=t;}catch(e){}
+  });
+}
+setInterval(updateCityTimes,60000);updateCityTimes();
+
+// Calculator
+function calcTransfer(){
+  const amt=parseFloat(document.getElementById('sendAmt').value)||0;
+  const rate=655.96,fee=0.025;
+  const net=amt*(1-fee)*rate;
+  document.getElementById('recvAmt').value=Math.round(net).toLocaleString('fr-FR');
+  document.getElementById('crVal').textContent=Math.round(net).toLocaleString('fr-FR')+' XAF';
+  document.getElementById('crSub').textContent=`Taux indicatif: 1 EUR ≈ ${rate} XAF · Frais estimés: ~${(fee*100).toFixed(1)}%`;
+}
+calcTransfer();
+
+// Toast
+function showToast(icon,msg){
+  let t=document.getElementById('dtToast');
+  if(!t){t=document.createElement('div');t.id='dtToast';t.style.cssText='position:fixed;bottom:1.5rem;left:1rem;right:1rem;max-width:480px;margin:0 auto;background:#0D0F14;border:.5px solid rgba(234,230,219,.1);padding:.875rem 1rem;font-size:12.5px;color:#A8A090;z-index:999;display:flex;align-items:center;gap:.625rem;transform:translateY(20px);opacity:0;transition:all .3s';document.body.appendChild(t);}
+  t.innerHTML=`<span style="font-size:16px">${icon}</span>${msg}`;
+  setTimeout(()=>{t.style.transform='none';t.style.opacity='1';},10);
+  setTimeout(()=>{t.style.transform='translateY(20px)';t.style.opacity='0';},4000);
+}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

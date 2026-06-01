@@ -2,20 +2,25 @@
 // PWA Offline Support & Caching Strategy
 // =========================================
 
-const CACHE_NAME = 'sopecam-v1.2';
-const STATIC_CACHE = 'sopecam-static-v1.2';
-const DYNAMIC_CACHE = 'sopecam-dynamic-v1.2';
+const CACHE_NAME = 'sopecam-v2.0';
+const STATIC_CACHE = 'sopecam-static-v2.0';
+const DYNAMIC_CACHE = 'sopecam-dynamic-v2.0';
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
+  '/auth.html',
+  '/onboarding.html',
+  '/track.html',
+  '/simulator.html',
+  '/diaspora.html',
+  '/terms.html',
+  '/privacy.html',
   '/lang.js',
   '/manifest.json',
   '/icon-192.svg',
   '/icon-512.svg',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js',
 ];
 
 // Install — pre-cache static assets

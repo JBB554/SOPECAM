@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SOPECAM Capital — Connexion</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#C9A84C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --gold:#C9A84C;--gold-soft:rgba(201,168,76,0.10);--gold-line:rgba(201,168,76,0.22);
+  --ink:#090B0F;--ink2:#0D0F14;--ink3:#111419;
+  --text:#EAE6DB;--text2:#A8A090;--text3:#5E5848;--text4:#2E2A1E;
+  --green:#3DB870;--red:#E05040;
+  --border:rgba(234,230,219,0.09);--border2:rgba(234,230,219,0.05);
+  --r:0px;
+}
+html,body{min-height:100vh;background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* Split layout */
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.auth-left{background:var(--ink2);border-right:.5px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;padding:3rem}
+.auth-right{display:flex;flex-direction:column;justify-content:center;padding:3rem;max-width:480px;margin:0 auto;width:100%}
+
+/* Left panel */
+.al-brand{margin-bottom:auto}
+.brand-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;letter-spacing:.06em}
+.brand-sub{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;display:block;margin-top:3px}
+.al-quote{margin:auto 0;padding:2rem 0;border-top:.5px solid var(--border);border-bottom:.5px solid var(--border)}
+.aq-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:1.25rem}
+.aq-text em{font-style:italic;color:var(--gold)}
+.aq-sub{font-size:12.5px;color:var(--text3);line-height:1.65}
+.al-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:auto}
+.as-cell{background:var(--ink2);padding:.875rem 1rem}
+.as-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold)}
+.as-lbl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;color:var(--text3);text-transform:uppercase;margin-top:3px}
+
+/* Right panel - form */
+.ar-header{margin-bottom:2rem}
+.ar-tag{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem;display:flex;align-items:center;gap:.5rem}
+.ar-tag::before{content:'';width:16px;height:.5px;background:var(--gold)}
+.ar-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);line-height:1.1;margin-bottom:.5rem}
+.ar-title em{font-style:italic;color:var(--gold)}
+.ar-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* Tabs */
+.auth-tabs{display:flex;gap:0;border-bottom:.5px solid var(--border);margin-bottom:1.75rem}
+.auth-tab{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:.75rem 0;margin-right:1.5rem;border-bottom:1.5px solid transparent;cursor:pointer;transition:all .2s}
+.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* Form */
+.form-group{margin-bottom:1.125rem}
+.form-label{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;display:block;margin-bottom:.5rem}
+.form-input{width:100%;background:var(--ink2);border:.5px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:.75rem 1rem;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--text3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.input-wrap{position:relative}
+.input-icon{position:absolute;right:.875rem;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text3);cursor:pointer;user-select:none}
+
+/* Social auth */
+.social-divider{display:flex;align-items:center;gap:.875rem;margin:1.25rem 0;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
+.social-divider::before,.social-divider::after{content:'';flex:1;height:.5px;background:var(--border)}
+.social-btns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.25rem}
+.social-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem;background:var(--ink2);border:.5px solid var(--border);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);cursor:pointer;transition:all .2s}
+.social-btn:hover{border-color:var(--text3);color:var(--text)}
+
+/* Buttons */
+.btn-primary{width:100%;padding:13px;background:var(--gold);color:var(--ink);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;border:none;cursor:pointer;transition:opacity .2s;margin-top:.25rem}
+.btn-primary:hover{opacity:.88}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+/* Plan badges for register */
+.plan-picker{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5px;background:var(--border);margin-bottom:1.25rem}
+.pp-opt{background:var(--ink2);padding:.875rem .75rem;cursor:pointer;text-align:center;transition:background .2s;border:.5px solid transparent}
+.pp-opt:hover,.pp-opt.selected{background:var(--ink3);border-color:var(--gold)}
+.pp-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:.35rem}
+.pp-price{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text)}
+.pp-price.free{color:var(--green)}
+.pp-period{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--text3)}
+.pp-note{font-size:10.5px;color:var(--text3);margin-top:.25rem}
+
+/* Status messages */
+.auth-msg{padding:.75rem 1rem;font-size:12.5px;line-height:1.5;margin-bottom:1rem;border:.5px solid;display:none}
+.auth-msg.error{background:rgba(224,80,64,.08);border-color:rgba(224,80,64,.3);color:var(--red)}
+.auth-msg.success{background:rgba(61,184,112,.08);border-color:rgba(61,184,112,.3);color:var(--green)}
+.auth-msg.show{display:block}
+
+/* Legal */
+.auth-legal{font-size:10.5px;color:var(--text3);line-height:1.6;margin-top:1.25rem;text-align:center}
+.auth-legal a{color:var(--gold)}
+
+/* Back link */
+.back-link{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:.4rem;margin-bottom:2rem;transition:color .2s}
+.back-link:hover{color:var(--gold)}
+
+/* Loading spinner */
+.spinner{display:inline-block;width:14px;height:14px;border:1.5px solid rgba(9,11,15,.3);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .auth-wrap{grid-template-columns:1fr}
+  .auth-left{display:none}
+  .auth-right{padding:2rem 1.25rem;max-width:100%}
+  .form-row{grid-template-columns:1fr}
+  .plan-picker{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="al-brand">
+      <span class="brand-name">SOPECAM CAPITAL</span>
+      <span class="brand-sub">Intelligence Financière · Yaoundé — Paris — Londres</span>
+    </div>
+    <div class="al-quote">
+      <div class="aq-text">L'intelligence financière<br>n'est plus un <em>privilège.</em><br>C'est votre droit.</div>
+      <p class="aq-sub">Rejoignez des milliers de Camerounais et membres de la diaspora qui accèdent aux marchés mondiaux — depuis Yaoundé.</p>
+    </div>
+    <div class="al-stats">
+      <div class="as-cell"><div class="as-num">40+</div><div class="as-lbl">Marchés Suivis</div></div>
+      <div class="as-cell"><div class="as-num">24/7</div><div class="as-lbl">Données Live</div></div>
+      <div class="as-cell"><div class="as-num">6</div><div class="as-lbl">Modules Académie</div></div>
+      <div class="as-cell"><div class="as-num">0 XAF</div><div class="as-lbl">Pour Commencer</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <a href="/index.html" class="back-link">← Retour à l'accueil</a>
+
+    <div class="ar-header">
+      <div class="ar-tag" id="formTag">Accès Plateforme</div>
+      <h1 class="ar-title" id="formTitle">Bon retour<br><em>parmi nous.</em></h1>
+      <p class="ar-desc" id="formDesc">Connectez-vous pour accéder à vos marchés, portefeuille et analyses personnalisées.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchTab('login')">Connexion</div>
+      <div class="auth-tab" onclick="switchTab('register')">Créer un compte</div>
+    </div>
+
+    <!-- STATUS MESSAGE -->
+    <div class="auth-msg" id="authMsg"></div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="social-btns">
+        <button class="social-btn" onclick="socialAuth('google')">🌐 Google</button>
+        <button class="social-btn" onclick="socialAuth('facebook')">📘 Facebook</button>
+      </div>
+      <div class="social-divider">ou par email</div>
+      <div class="form-group">
+        <label class="form-label">Adresse Email</label>
+        <input type="email" class="form-input" id="loginEmail" placeholder="vous@exemple.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de Passe</label>
+        <div class="input-wrap">
+          <input type="password" class="form-input" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+          <span class="input-icon" onclick="togglePass('loginPass',this)">👁</span>
+        </div>
+      </div>
+      <div style="text-align:right;margin-bottom:1rem">
+        <a href="#" onclick="switchTab('reset')" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase">Mot de passe oublié →</a>
+      </div>
+      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Se Connecter</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none">
+      <div class="form-group" style="margin-bottom:.75rem">
+        <label class="form-label">Choisissez votre accès</label>
+        <div class="plan-picker">
+          <div class="pp-opt selected" onclick="selectPlan('free',this)">
+            <div class="pp-name">Libre</div>
+            <div class="pp-price free">0</div>
+            <div class="pp-period">XAF / mois</div>
+            <div class="pp-note">Pour commencer</div>
+          </div>
+          <div class="pp-opt" onclick="selectPlan('capital',this)">
+            <div class="pp-name">Capital</div>
+            <div class="pp-price">4 900</div>
+            <div class="pp-period">XAF / mois</div>
+            <div class="pp-note">Analyses + Alertes</div>
+          </div>
+          <div class="pp-opt" onclick="selectPlan('elite',this)">
+            <div class="pp-name">Élite</div>
+            <div class="pp-price">14 900</div>
+            <div class="pp-period">XAF / mois</div>
+            <div class="pp-note">Accès complet</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" id="regFirst" placeholder="Jean" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-input" id="regLast" placeholder="Mbida" autocomplete="family-name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse Email</label>
+        <input type="email" class="form-input" id="regEmail" placeholder="vous@exemple.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de Passe</label>
+        <div class="input-wrap">
+          <input type="password" class="form-input" id="regPass" placeholder="8 caractères minimum" autocomplete="new-password">
+          <span class="input-icon" onclick="togglePass('regPass',this)">👁</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Vous êtes</label>
+        <select class="form-input" id="regProfile" style="cursor:pointer">
+          <option value="beginner">Débutant — Je découvre l'investissement</option>
+          <option value="intermediate">Investisseur Intermédiaire</option>
+          <option value="advanced">Investisseur Avancé</option>
+          <option value="diaspora">Diaspora Camerounaise</option>
+          <option value="institutional">Institution / Entreprise</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="registerBtn" onclick="doRegister()">Créer mon Compte →</button>
+    </div>
+
+    <!-- RESET FORM -->
+    <div id="resetForm" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Votre adresse email</label>
+        <input type="email" class="form-input" id="resetEmail" placeholder="vous@exemple.com">
+      </div>
+      <button class="btn-primary" onclick="doReset()">Envoyer le lien de réinitialisation</button>
+      <div style="text-align:center;margin-top:1rem">
+        <a href="#" onclick="switchTab('login')" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.1em">← Retour à la connexion</a>
+      </div>
+    </div>
+
+    <p class="auth-legal">
+      En continuant, vous acceptez nos <a href="/terms.html">Conditions d'Utilisation</a> et notre <a href="/privacy.html">Politique de Confidentialité</a>.<br>
+      Vos données sont traitées conformément au RGPD et aux réglementations camerounaises.
+    </p>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE CONFIG ──
+// Replace with your project values from supabase.com → Settings → API
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON = 'YOUR_ANON_KEY';
+const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let selectedPlan = 'free';
+
+// ── UI HELPERS ──
+function showMsg(type, text) {
+  const el = document.getElementById('authMsg');
+  el.className = `auth-msg ${type} show`;
+  el.textContent = text;
+}
+function clearMsg() {
+  document.getElementById('authMsg').className = 'auth-msg';
+}
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Chargement...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btnId === 'loginBtn' ? 'Se Connecter' : 'Créer mon Compte →';
+  }
+}
+function togglePass(inputId, icon) {
+  const inp = document.getElementById(inputId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+function selectPlan(plan, el) {
+  selectedPlan = plan;
+  document.querySelectorAll('.pp-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function switchTab(tab) {
+  clearMsg();
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'none';
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  if (tab === 'login') {
+    document.getElementById('loginForm').style.display = 'block';
+    document.querySelectorAll('.auth-tab')[0].classList.add('active');
+    document.getElementById('formTitle').innerHTML = 'Bon retour<br><em>parmi nous.</em>';
+    document.getElementById('formDesc').textContent = 'Connectez-vous pour accéder à vos marchés, portefeuille et analyses personnalisées.';
+  } else if (tab === 'register') {
+    document.getElementById('registerForm').style.display = 'block';
+    document.querySelectorAll('.auth-tab')[1].classList.add('active');
+    document.getElementById('formTitle').innerHTML = 'Rejoignez<br><em>SOPECAM Capital.</em>';
+    document.getElementById('formDesc').textContent = 'Créez votre compte gratuit en 60 secondes. Accès immédiat aux marchés.';
+  } else {
+    document.getElementById('resetForm').style.display = 'block';
+    document.getElementById('formTitle').innerHTML = 'Mot de passe<br><em>oublié ?</em>';
+    document.getElementById('formDesc').textContent = 'Entrez votre email et nous vous enverrons un lien de réinitialisation.';
+  }
+}
+
+// ── AUTH FUNCTIONS ──
+async function doLogin() {
+  clearMsg();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) return showMsg('error', 'Veuillez remplir tous les champs.');
+  setLoading('loginBtn', true);
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+    localStorage.setItem('sopecam_onboarded', '1');
+    showMsg('success', 'Connexion réussie. Redirection...');
+    setTimeout(() => location.href = '/index.html', 1200);
+  } catch (e) {
+    showMsg('error', e.message || 'Erreur de connexion. Vérifiez vos identifiants.');
+    setLoading('loginBtn', false);
+  }
+}
+
+async function doRegister() {
+  clearMsg();
+  const first = document.getElementById('regFirst').value.trim();
+  const last = document.getElementById('regLast').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const profile = document.getElementById('regProfile').value;
+  if (!first || !email || !pass) return showMsg('error', 'Veuillez remplir les champs obligatoires.');
+  if (pass.length < 8) return showMsg('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+  setLoading('registerBtn', true);
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email, password: pass,
+      options: { data: { first_name: first, last_name: last, investor_profile: profile, plan: selectedPlan } }
+    });
+    if (error) throw error;
+    showMsg('success', 'Compte créé ! Vérifiez votre email pour confirmer votre inscription.');
+    setLoading('registerBtn', false);
+    setTimeout(() => location.href = '/onboarding.html', 2000);
+  } catch (e) {
+    showMsg('error', e.message || 'Erreur lors de la création du compte.');
+    setLoading('registerBtn', false);
+  }
+}
+
+async function doReset() {
+  clearMsg();
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) return showMsg('error', 'Veuillez entrer votre adresse email.');
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/auth.html' });
+    if (error) throw error;
+    showMsg('success', 'Email envoyé ! Vérifiez votre boîte de réception.');
+  } catch (e) {
+    showMsg('error', e.message || 'Erreur. Vérifiez votre email.');
+  }
+}
+
+async function socialAuth(provider) {
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + '/index.html' } });
+    if (error) throw error;
+  } catch (e) {
+    showMsg('error', 'Connexion sociale temporairement indisponible.');
+  }
+}
+
+// ── CHECK SESSION ──
+if (supabase) {
+  supabase.auth.getSession().then(({ data }) => {
+    if (data?.session) location.href = '/index.html';
+  });
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('loginForm').style.display !== 'none') doLogin();
+    else if (document.getElementById('registerForm').style.display !== 'none') doRegister();
+  }
+});
+</script>
+</body>
+</html>
